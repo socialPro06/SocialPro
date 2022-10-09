@@ -4,9 +4,9 @@ const adminSchema = new Schema({
   name : { type : String, require:true },
   emailId :{type:String , require:true},
   password : { type:String,require:true},
-  ProfilePic : {type:String},
-  IsDeleted : {type: Boolean , default :false},
-  DeletionDate :{type:Date}
+  profilePic : {type:String},
+  isDeleted : {type: Boolean , default :false},
+  deletionDate :{type:Date}
 },{
     timestamps:true
 }
