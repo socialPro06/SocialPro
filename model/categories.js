@@ -11,4 +11,4 @@ const categorySchema = new Schema({
     },
     status: { type:Boolean }
 })
-module.export = model('category',categorySchema);
+module.exports = model('category',categorySchema);

@@ -1,6 +1,6 @@
-const { model,Schema } = require("mongoose");
+const {model,Schema} = require('mongoose')
 
-const influencerSchema = new Schema({
+const advertiserSchema = new Schema({
     userName: { 
         type: String, 
         required: true 
@@ -22,10 +22,6 @@ const influencerSchema = new Schema({
         type: Number, 
         required: true, 
         unique: true 
-    },
-    profileUrl: { 
-        type: String, 
-        required: true 
     },
     password:{
         type: String, 
@@ -50,19 +46,35 @@ const influencerSchema = new Schema({
     profilePic: { 
         type: String,  
     },
+    panNumber:{
+        type:Number,
+        require:true
+    },
+    residentalAdress:{
+        type:String,
+        require:true
+    },
+    city:{},
+    zipCode:{
+        type:Number,
+        require:true
+    },
+    panImgFront:{
+        type:String,
+        require:true
+    },
+    panImgBack:{
+        type:String,
+        require:true
+    },
     // latitude:{
     //     type:String
     // },
     // longitude: {
     //     type:String
     // },
-    status: {
-        type:String,
-        enum:['pending','complete'],
-        default: 'pending'
-    },
 },{
     timestamps:true
 })
 
-module.exports = model('influencer',influencerSchema);
+module.exports = model('advertiser',advertiserSchema);
