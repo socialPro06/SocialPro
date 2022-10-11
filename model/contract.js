@@ -14,7 +14,7 @@ const adsCreateSchema = new mongoose({
         required: true,
         trim:true 
     },
-    categories: { 
+    category: { 
         type: String, 
         required: true 
     },
