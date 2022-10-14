@@ -14,8 +14,8 @@ getResult = async (result,res,next)=>{
 };
 
 exports.influencerMobileCheck = async(req,res,next)=>{
-    let isMobile = await influencerModel.findOne({mobileNo : req.body.mobileNo})
     try{
+    let isMobile = await influencerModel.findOne({mobileNo : req.body.mobileNo})
         if(isMobile){                      
             return response("Mobile number is already exist !",{},400,res) // 400 -> Bad Request
         }
@@ -27,9 +27,22 @@ exports.influencerMobileCheck = async(req,res,next)=>{
     }
 }
 
+exports.advertiserMobileCheck = async(req,res,next)=>{
+    try {
+    let isMobile = await advertiserModel.findOne({mobileNo : req.body.mobileNo})
+        if(isMobile)
+            return response("Mobile number is alredy exist! ",{},400,res)
+        else
+            next();
+    } catch (err) {
+        return response("Something went wrong!!",err,500,res)
+    }
+}
+
+
 exports.adminMobileCheck = async (req,res,next)=>{
-    let isMobile = await adminModel.findOne({mobileNo: req.body.mobileNo})
     try{
+    let isMobile = await adminModel.findOne({mobileNo: req.body.mobileNo})
     if(isMobile){
         return response("Mobile Number is alredy exist !!",{},400,res)
     }
@@ -39,4 +52,40 @@ exports.adminMobileCheck = async (req,res,next)=>{
     }catch(err){
     return response("Something went wrong in validation !",err,500,res)
 }
+}
+
+exports.adminEmailCheck = async(req,res,next)=>{
+    try {
+    let isEmail = await adminModel.findOne({emailId : req.body.emailId})
+        if(isEmail)
+            return response("Email alredy exist!!",{},400,res)
+        else
+            next()
+    } catch (err) {
+        return response("Somthing went wrong!!",err,500,res)
+    }
+}
+
+exports.influencerEmailCheck = async (req,res,next)=>{
+    try {
+    let isEmail = await influencerModel.findOne({emailId: req.body.emailId})
+        if(isEmail)
+            return response("Email is alredy exist !!",{},400,res)
+        else
+            next();
+    } catch (err) {
+        return response("Somthing went wrong !!",err,500,res)
+    }
+}
+
+exports.advertiserEmailCheck = async (req,res,next)=>{
+    try {
+        let isEmail = await advertiserModel.findOne({emailId: req.body.emailId})
+        if(isEmail)
+            return response("Email is already exist !!",{},400,res)
+        else
+            next();
+    } catch (err) {
+        return response("Something went wrong !!",err,500,res);
+    }
 }
