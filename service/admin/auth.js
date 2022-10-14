@@ -24,7 +24,7 @@ login:(emailId, password)=>{
     return new Promise(async (res,rej)=>{
     try {
         let loginData = await adminModel.findOne({emailId});
-        console.log("Login Data...",loginData);
+        console.log("Login Data...",loginData); 
         if(loginData){
             const isMatch = await compare({password: loginData.password});
             if(isMatch){

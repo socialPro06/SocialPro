@@ -30,6 +30,8 @@ register: (data)=>{
             console.log('error...',err)
             rej({status:err?.status || 500, error: err, message:err?.message || "Something went wrong"})
         }
-    })
-}
+    });
+},
+
+
 }
