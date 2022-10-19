@@ -5,10 +5,10 @@ let supportSchema = new Schema(
         name: {
             type: String,
         },
-        email: {
+        emailId: {
             type: String,
         },
-        phone: {
+        mobileNo: {
             type: Number,
         },
         message: {

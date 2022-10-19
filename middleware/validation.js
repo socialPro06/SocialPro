@@ -1,4 +1,4 @@
-const response = require('../middleware/response')
+const {response} = require('../middleware/response')
 const adminModel = require('../model/admin')
 const influencerModel = require('../model/influencer')
 const advertiserModel = require('../model/advertiser')
@@ -58,11 +58,11 @@ exports.adminEmailCheck = async(req,res,next)=>{
     try {
     let isEmail = await adminModel.findOne({emailId : req.body.emailId})
         if(isEmail)
-            return response("Email alredy exist!!",{},400,res)
+            return response("Admin Email alredy exist!!",{},400,res)
         else
             next()
     } catch (err) {
-        return response("Somthing went wrong!!",err,500,res)
+        return response("Somthing went wrong with admin Email !!",err,500,res)
     }
 }
 
@@ -70,11 +70,11 @@ exports.influencerEmailCheck = async (req,res,next)=>{
     try {
     let isEmail = await influencerModel.findOne({emailId: req.body.emailId})
         if(isEmail)
-            return response("Email is alredy exist !!",{},400,res)
+            return response("Influencer Email is alredy exist !!",{},400,res)
         else
             next();
     } catch (err) {
-        return response("Somthing went wrong !!",err,500,res)
+        return response("Somthing went wrong with Influencer Email !!",err,500,res)
     }
 }
 

@@ -5,11 +5,11 @@ const { Router } = require('express')
 const authRoute = Router()
 
 authRoute.get('/',(req,res)=>{
-    res.send({status:200,message:"Auth route is working!!"})
+    res.send({status:200,message:"Admin Auth route is working!!"})
 })
 
 authRoute.post('/register',adminEmailCheck,authController.register)
-authRoute.post('/login',adminEmailCheck,authController.login)
+authRoute.post('/login',authController.login)
 
 module.exports = authRoute;
 
