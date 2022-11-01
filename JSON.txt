@@ -37,3 +37,6 @@ influencer Register --->
       }
     });
   },
+
+
+  password ::: awcbhsynvlwzdmji

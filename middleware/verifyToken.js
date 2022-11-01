@@ -48,7 +48,7 @@ function influencerForgotToken(req,res,next){
         res.status(403).json({success:false,message:"token missing"})
     } else {
         token = token.split(" ")[1]
-        jwt.sign(token,process.env.INFLUENCER_ACCESS_TOKEN,(req,playload)=>{
+        jwt.sign(token,process.env.INFLUENCER_ACCESS_TOKEN,(err,playload)=>{
             if (err) {
                 res.status(403).join({success:false,message:"Unauthorized Token"})
             } else {

@@ -32,7 +32,7 @@ exports.login = async (req,res)=>{
 
 exports.forgot = async(req,res)=>{
     try {
-        let resp = await authService.forgot(res.body.emailId)
+        let resp = await authService.forgot(req.body.emailId)
         if (resp) {
             return response('Influencer Password changed ..!! ',resp.data , 200 , res)
         } else {

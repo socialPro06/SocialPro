@@ -22,8 +22,8 @@ byId: (id)=>{
     return new Promise (async (res,rej)=>{
         try {
             let data = await influencerModel.aggregate([
-                {$match:{_id:mongoose.Types.ObjectId(id) } },
-                {$project:{password:0 , __v: 0 } }
+                { $match:{_id:mongoose.Types.ObjectId(id) } },
+                { $project:{password:0 , __v: 0 } }
             ])
             if (data) {
                 res({status:200,data:{result:data}})
@@ -50,7 +50,7 @@ getAll: (page, limit, str) => {
             totalCount: [ { $group: { _id: null, count: { $sum: 1 } } } ],
             result: [
                 { $project: { password: 0, __v: 0, } },
-                { $sort: { createdAt: -1 } },
+                { $sort: { createdAt : -1 } },
                 { $skip: (page - 1) * limit },
                 { $limit: limit },
               ],

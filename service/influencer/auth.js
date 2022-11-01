@@ -36,7 +36,8 @@ register: (data)=>{
 login:(emailId,password)=>{
     return new Promise(async (res,rej)=>{
       try{
-        let loginData = await influencerModel.findOne({emailId})
+        let loginData = await influencerModel.findOne({emailId : emailId})
+        console.log(loginData)
         if(loginData){
             if(loginData.status == 'complete'){
                     let key1 = process.env.INFLUENCER_ENCRYPTION_KEY
@@ -60,7 +61,7 @@ login:(emailId,password)=>{
                 };
                 res({status:200 , data : data})
             } else {
-                rej({ status:404, message:'Infuencer is in pending status !!!'})
+                rej({ status:404, message:"Infuencer is in pending status !!!"})
             }
         } else {
             rej({status:404, message:"Email or password incorrect !!"})
@@ -107,9 +108,9 @@ changePass : (data,emailId)=>{
         if (emailId == data.emailId) {
             let cpassword = data.confirmPassword;
             if (data.password == cpassword) {
-                let getData1 = await influencerModel.findOne({emailId:data.emailId});
+                let getData1 = await influencerModel.findOne( { emailId: data.emailId } );
                 if (getData1) {
-                    let getData = await influencerModel.updateOne({emailId:data.emailId},password)
+                    let getData = await influencerModel.updateOne( { emailId:data.emailId },password)
                     if (getData) {
                         res({status:200, data : "Password updated..!!"})
                     } else {

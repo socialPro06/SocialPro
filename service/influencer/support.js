@@ -10,7 +10,7 @@ module.exports = {
                 if (saveData) {
                     res({status:200,data:"support Successfully!!"})
                 } else {
-                    res({status:404,message:"Something went wrong in support !! "})
+                    rej({status:404,message:"Something went wrong in support !! "})
                 }
             } catch (err) {
                 console.log("error....",err)
