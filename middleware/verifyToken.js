@@ -6,7 +6,7 @@ require("dotenv").config({ path: path.join(__dirname,"../config/.env")})
 function verifyAdminToken(req,res,next){
     let token = req.headers["authorization"];
     if(!token){
-        res.staus(403).json({success:false,message:"Token missing"});
+        res.status(403).json({success:false,message:"Token missing"});
     }
     else{
         token = token.split(" ")[1];
@@ -33,7 +33,7 @@ function verifyInfluencerToken(req,res,next){
             if(err){
                 res.status(403).json({success:false,message:"Influencer unauthorized Token"})
             } else {
-                req.influenceId = decrypt(playload.influenceId,process.env.INFLUENCER_ENCRYPTION_KEY);
+                req.influencerId = decrypt(playload.influencerId,process.env.INFLUENCER_ENCRYPTION_KEY);
                 req.password = decrypt(playload.password,process.env.INFLUENCER_ENCRYPTION_KEY)
                 req.emailId = decrypt(playload.emailId,process.env.INFLUENCER_ENCRYPTION_KEY)
                 next();
@@ -42,25 +42,47 @@ function verifyInfluencerToken(req,res,next){
     }
 }
 
-function influencerForgotToken(req,res,next){
-    let token = req.headers['authorization']
+function verifyAdvertiserToken(req,res,next){
+    let token = req.headers["authorization"];
     if (!token) {
-        res.status(403).json({success:false,message:"token missing"})
+        res.status(403).json({success:false,message:"Advertiser Token missing !!"})
     } else {
         token = token.split(" ")[1]
-        jwt.sign(token,process.env.INFLUENCER_ACCESS_TOKEN,(err,playload)=>{
+        jwt.verify(token,process.env.ADVERTISER_ACCESS_TOKEN,(err,playload)=>{
             if (err) {
-                res.status(403).join({success:false,message:"Unauthorized Token"})
+                res.status(403).json({status:false,message:"Advertiser unauthorized Token"})
             } else {
-                req.influenceId = decrypt(playload.influenceId,process.env.INFLUENCER_ENCRYPTION_KEY)
-                req.emailId = decrypt(playload.emailId,process.env.INFLUENCER_ENCRYPTION_KEY)
-                next();
-            }   
+                req.advertiserId = decrypt(playload.advertiserId , process.env.ADVERTISER_ENCRYPTION_KEY)
+                req.password = decrypt(playload.password,process.env.ADVERTISER_ENCRYPTION_KEY)
+                req.emailId = decrypt(playload.emailId,process.env.ADVERTISER_ENCRYPTION_KEY)
+                next()
+            }
         })
     }
 }
+
+// function influencerForgotToken(req,res,next){
+//     let token = req.headers['authorization']
+//     if (!token) {
+//         res.status(403).json({success:false,message:"token missing"})
+//     } else {
+//         token = token.split(" ")[1]
+//         jwt.verify(token,process.env.INFLUENCER_ACCESS_TOKEN,(err,playload)=>{
+//             if (err) {
+//                 res.status(403).join({success:false,message:"Unauthorized Token"})
+//             } else {
+//                 req.influencerId = decrypt(playload.influencerId,process.env.INFLUENCER_ENCRYPTION_KEY)
+//                 req.emailId = decrypt(playload.emailId,process.env.INFLUENCER_ENCRYPTION_KEY)
+//                 next();
+//             }   
+//         })
+//     }
+// }
+
+
 module.exports = {
     verifyAdminToken,
     verifyInfluencerToken,
-    influencerForgotToken
+    verifyAdvertiserToken,
+    // influencerForgotToken
 }

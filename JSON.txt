@@ -11,6 +11,25 @@ influencer Register --->
 "gender":"male",
 "dob" : "2022-10-18T07:26:54.855+00:00"
     
+
+advertiser Register --->
+
+"userName" : "slok",
+"firstName":"slok",
+"lastName" : "vaghasiya",
+"emailId" :  "slokvaghasiya@gmail.com",
+"mobileNo" :1010101010,
+"password": "slok1234",
+"confirmPassword" : "slok1234",
+"gender":"male",
+"dob" : "2022-10-18T07:26:54.855+00:00"
+"panNumber" :"123",
+"residentalAdress":"ABC",
+"zipCode":"456",
+"panImgFront":"PIF"    
+"panImgBack":"PIB"    
+
+
   sendOtp: (mobile, email) => {
     return new Promise(async (res, rej) => {
       try {

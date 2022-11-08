@@ -10,6 +10,6 @@ adminRoute.get('/',(req,res)=>{
 })
 
 adminRoute.use("/auth",authRoute);
-adminRoute.use('/influManage',influManageRoute)
+adminRoute.use('/influManage',verifyAdminToken,influManageRoute)
 
 module.exports = adminRoute;

@@ -1,57 +1,57 @@
 const authService = require('../../service/influencer/auth')
 const { response } = require('../../middleware/response')
 
-exports.register = async (req,res)=>{
-    try{
-    let resp = await authService.register(req.body);
-        if(resp){
-            return response('Influencer Regi. Successful..!! ',resp.data , 200 , res)
+exports.register = async (req, res) => {
+    try {
+        let resp = await authService.register(req.body);
+        if (resp) {
+            return response('Influencer Regi. Successful..!! ', resp.data, 200, res)
             // res.send('Influencer Regi. Successful..!! ',resp.data , 200 , res)
         }
-        else{
-            return response("Something wrong in Influencer Regi. !!",{},500,res)
+        else {
+            return response("Something wrong in Influencer Regi. !!", {}, 500, res)
             // res.send("Something wrong in Influencer Regi. !!",{},500,res)
         }
-    }catch(err){
-        return response(err.mesage,err?.error,err.status,res)
+    } catch (err) {
+        return response(err.message, err?.error, err.status, res)
     }
 };
 
-exports.login = async (req,res)=>{
+exports.login = async (req, res) => {
     try {
-        let resp = await authService.login(req.body.emailId,req.body.password);
-        if(resp){
-            return response('Influencer Login Successful..!! ',resp.data , 200 , res)
+        let resp = await authService.login(req.body.emailId, req.body.password);
+        if (resp) {
+            return response('Influencer Login Successful..!! ', resp.data, 200, res)
         } else {
-            return response("Something wrong in Influencer Login !!",{},500,res)
+            return response("Something wrong in Influencer Login !!", {}, 500, res)
         }
     } catch (err) {
-        return response(err.mesage,err?.error,err.status,res)
+        return response(err.message, err?.error, err.status, res)
     }
 }
 
-exports.forgot = async(req,res)=>{
+exports.forgot = async (req, res) => {
     try {
-        let resp = await authService.forgot(req.body.emailId)
+        let resp = await authService.forgot(req.body.emailId,req.body.otp,req.body.newPassword,req.body.confirmPassword)
         if (resp) {
-            return response('Influencer Password changed ..!! ',resp.data , 200 , res)
+            return response('Influencer Password changed ..!! ', resp.data, 200, res)
         } else {
-            return response("Something wrong in Influencer Password !!",{},500,res)
+            return response("Something wrong in Influencer Password !!", {}, 500, res)
         }
     } catch (err) {
-        return response(err.mesage,err?.error,err.status,res)
+        return response(err.message, err?.error, err.status, res)
     }
 }
 
-exports.changePass = async (req,res)=>{
+exports.changePass = async (req, res) => {
     try {
-        let resp = await authService.changePass(req.body,req.emailId)
+        let resp = await authService.changePass(req.body, req.query.emailId)
         if (resp) {
-            return response("Successfuly Changed..!!",resp.data,res)
+            return response("Successfuly Changed..!!", resp.data, 200, res)
         } else {
-            return response("Something wrong in Influencer changed Password")
+            return response("Something wrong in Influencer changed Password", {}, 500, res)
         }
     } catch (err) {
-        return response(err.mesage,err?.error,err.status,res)
+        return response(err.message, err?.error, err.status, res)
     }
 }
