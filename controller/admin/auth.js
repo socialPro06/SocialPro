@@ -1,4 +1,4 @@
-const response = require('../../middleware/response')
+const {response} = require('../../middleware/response')
 const authService = require('../../service/admin/auth')
 
 exports.register = async (req,res)=>{

@@ -26,8 +26,6 @@ login:(emailId, password)=>{
         let loginData = await adminModel.findOne({emailId});
         console.log("Login Data...",loginData); 
         if(loginData){
-            const isMatch = await compare({password: loginData.password});
-            if(isMatch){
                 let key1 = process.env.ADMIN_ENCRYPTION_KEY;
                 let encryptAdmin = encrypt(loginData._id,key1);
                 let encryptPass = encrypt(loginData.password,key1);
@@ -37,9 +35,6 @@ login:(emailId, password)=>{
                 { expiresIn: process.env.ADMIN_ACCESS_TIME }
                 );
                 res({status:202, data:token})                
-            }else {
-                rej({status:404,message:"Something went Wrong !!"});
-            }
         }else{
             console.log("invalid email")
             rej({status:404,message:"Invalid Email Entered !!"})

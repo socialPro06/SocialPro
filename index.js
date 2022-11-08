@@ -18,7 +18,7 @@ app.get('/',(req,res)=>{
 
 app.use("/v1",v1);
 
- mongoose.connect("mongodb://localhost:27017/Social_Pro",(err,result)=>{
+ mongoose.connect(process.env.DATABSE_CONNECTION,async (err,result)=>{
     if(err){
         console.log(err)
     }
