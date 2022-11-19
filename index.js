@@ -9,24 +9,25 @@ require("dotenv").config({ path: path.join(__dirname, "./config/.env") });
 const PORT = 5000;
 
 app.use(express.json())
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 
-app.get('/',(req,res)=>{
+app.get('/', (req, res) => {
     res.status(200).json("Initial root for Social pro")
 })
 
-app.use("/v1",v1);
+app.use("/v1", v1);
 
- mongoose.connect(process.env.DATABSE_CONNECTION,async (err,result)=>{
-    if(err){
+mongoose.connect(process.env.DATABSE_CONNECTION, async (err, result) => {
+    if (err) {
         console.log(err)
     }
-    else{
-        app.listen(PORT,()=>{
-            console.log("connection on PORT ",PORT)
+    else {
+        app.listen(PORT, () => {
+            console.log("connection on PORT ", PORT)
             console.log("Mongo DB connect")
         })
     }
- })
-  
+})
+
+//npm run dev
