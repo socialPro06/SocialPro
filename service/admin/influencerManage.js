@@ -30,7 +30,7 @@ byId: (id)=>{
             } else {
                 res({status:404,message:"Influ... Not found !! ",error:{}})
             }
-            rej({status: 404,message: "User Not Found, Invalid id!!",error: {},});
+            rej({status: 404,message: "User Not Found, Invalid id!!",error: {}});
         } catch (err) {
             console.log("Error...",err)
             rej({status:500,error:err,message:"Something went Wrong...!!"})
@@ -44,7 +44,7 @@ getAll: (page, limit, str) => {
         
         page = parseInt(page);
         limit = parseInt(limit);
-        let getData = await userModel.aggregate([
+        let getData = await influencerModel.aggregate([
           { $match: { emailId: { $regex: str, $options: "i" } } },
           { $facet: {
             totalCount: [ { $group: { _id: null, count: { $sum: 1 } } } ],

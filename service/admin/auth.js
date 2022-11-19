@@ -37,7 +37,7 @@ login:(emailId, password)=>{
                 res({status:202, data:token})                
         }else{
             console.log("invalid email")
-            rej({status:404,message:"Invalid Email Entered !!"})
+            rej({status:404, message:"Invalid Email Entered !!",error: {}})
         }
     } catch (err) {
         console.log("Error....!",err),

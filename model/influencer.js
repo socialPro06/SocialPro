@@ -50,6 +50,30 @@ const influencerSchema = new Schema({
     profilePic: { 
         type: String,  
     },
+    panNumber:{
+        type:Number,
+        require:true
+    },
+    panImgFront:{
+        type:String,
+        require:true
+    },
+    panImgBack:{
+        type:String,
+        require:true
+    },
+    residentalAdress:{
+        type:String,
+        require:true
+    },
+    city:{
+        type: String,
+        require:true
+    },
+    zipCode:{
+        type:Number,
+        require:true
+    },
     // latitude:{
     //     type:String
     // },
