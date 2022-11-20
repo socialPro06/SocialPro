@@ -6,7 +6,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const v1 = require('./router/v1')
 require("dotenv").config({ path: path.join(__dirname, "./config/.env") });
-const PORT = 5000;
+// const PORT = 5000;
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -23,8 +23,8 @@ mongoose.connect(process.env.DATABSE_CONNECTION, async (err, result) => {
         console.log(err)
     }
     else {
-        app.listen(PORT, () => {
-            console.log("connection on PORT ", PORT)
+        app.listen(process.env.PORT, () => {
+            console.log("connection on PORT ", process.env.PORT)
             console.log("Mongo DB connect")
         })
     }
