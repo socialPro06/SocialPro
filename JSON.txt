@@ -58,4 +58,4 @@ advertiser Register --->
   },
 
 
-  password ::: awcbhsynvlwzdmji
+  password for OTP service ::: awcbhsynvlwzdmji

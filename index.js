@@ -6,7 +6,6 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const v1 = require('./router/v1')
 require("dotenv").config({ path: path.join(__dirname, "./config/.env") });
-// const PORT = 5000;
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
