@@ -1,6 +1,6 @@
 const contractModel = require("../../model/contract")
 const {response} = require('../../middleware/response')
-
+// contract function
 module.exports = {
     contract : (data)=>{
         return new Promise (async (res,rej)=>{
