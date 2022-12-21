@@ -3,6 +3,7 @@ const influencerModel = require('../../model/influencer')
 const { encrypt } = require('../../helper/encrypt-decrypt')
 const commonService = require('../common')
 const otpModel = require('../../model/otp')
+const puppeteer = require('puppeteer')
 
 module.exports = {
     register: (data) => {
@@ -125,6 +126,66 @@ module.exports = {
                 console.log("Error....", err)
                 rej({ status: 500, error: err, message: "Something went Wrong.." })
             }
+        })
+    },
+
+    scrape:(userName)=>{
+        return new Promise(async (res,rej)=>{
+        try {
+            async function start(name) {
+            const browser = await puppeteer.launch({
+                headless: false,
+                // slowMo: 100,
+                devtools: false,
+              });
+              const page = await browser.newPage()
+              await page.goto(`https://www.instagram.com/${name}`)
+
+              let profileImage = await page.evaluate(() => {
+                let a = Array.from(document.querySelectorAll("._aarg img")).map(e => e.src).toString();
+                return a
+              })
+              console.log("profileImage .............",profileImage)
+            
+              let verifiedAcc = await page.evaluate(() => {
+                let a = Array.from(document.getElementsByClassName("_act0 _a9_u _9ys7")).map(e=>e.textContent).toString();
+                return a
+              })
+              console.log("verifiedAcc .............",verifiedAcc)
+            
+              let postCount = await page.evaluate(() => {
+                let a = Array.from(document.querySelectorAll("._ac2a")).map(e=>e.textContent)[0].toString();
+                return a
+              })
+              console.log("postCount .............",postCount)
+            
+              let followingNumber = await page.evaluate(() => {
+                let a = Array.from(document.querySelectorAll("._ac2a")).map(e=>e.textContent)[1].toString();
+                return a
+              })
+              console.log("followingNumber .............",followingNumber)
+            
+              let followerNumber = await page.evaluate(() => {
+                let a = Array.from(document.querySelectorAll("._ac2a")).map(e=>e.textContent)[2].toString();
+                return a
+              })
+              console.log("followerNumber .............",followerNumber)
+            
+              let bio = await page.evaluate(() => {
+                let a = Array.from(document.querySelectorAll("._aa_c ._aade")).map(e=>e.textContent).toString();
+                let b=a.split(",");
+                return b
+              })
+              console.log("bio .............",bio)
+            
+              await browser.close()
+            }
+
+            start(userName)
+        } catch (err) {
+            console.log("Error....", err)
+                rej({ status: 500, error: err, message: "Something went Wrong.." })
+        }
         })
     }
 }

@@ -3,13 +3,13 @@ const puppeteer = require('puppeteer')
 async function start(name) {
   const browser = await puppeteer.launch({
     headless: false,
-    // slowMo: 100,
+    // slowMo: 500,
     devtools: false,
   });
   const page = await browser.newPage()
 
-  
-  await page.goto(`https://www.instagram.com/${name}`)
+  await page.goto(`https://www.instagram.com/${name}/`)
+  // await page.screenshot({path: "abc.png", fullPage:true })
 
   //rutu
   let profileImage = await page.evaluate(() => {
@@ -52,4 +52,4 @@ async function start(name) {
   await browser.close()
 }
 
-start("unsw")
+start("status_world_2143")
