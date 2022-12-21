@@ -55,3 +55,16 @@ exports.changePass = async (req, res) => {
         return response(err.message, err?.error, err.status, res)
     }
 }
+
+exports.scrape = async(res,rej)=>{
+    try {
+        let resp = await authService.scrape(req.body.userName)
+        if (resp) {
+            return response("Successfuly Changed..!!", resp.data, 200, res)
+        } else {
+            return response("Something wrong in scarp", {}, 500, res)
+        }
+    } catch (err) {
+        
+    }
+}

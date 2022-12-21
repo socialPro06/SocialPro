@@ -12,14 +12,15 @@ const bucket = getStorage().bucket('gs://socialpro-fe346.appspot.com/')
 
 module.exports = {
 
-    upload:  (image) => {
+    upload: async (image) => {
         return new Promise(async (res, rej) => {
             try {
                 let media = []
                 console.log('image',image)
                 let uploaded = bucket.upload(image.path, {
                     public: true,
-                    destination: `images/${Math.random() * 1000 + image.filename}`,
+                    // destination: `images/${Math.random() * 1000 + image.filename}`,
+                    destination: `images/${image.filename}`,
                     metadata: {
                         firebaseStorageDownloadTokens: uuidv4()
                     }
@@ -47,10 +48,10 @@ module.exports = {
             }
         })
     },
-    delete: async (file) => {
+    delete: async (image) => {
         return new Promise(async (res, rej) => {
             try {
-                const deleted = await bucket.file(file).delete();
+                const deleted = await bucket.file(`images/${image}`).delete();
                 if (deleted) {
                     res({ status: 200, data: "File Deleted Successfully!!" });
                 } else {

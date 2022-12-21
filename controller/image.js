@@ -3,7 +3,8 @@ let { response } = require("../middleware/response");
 
 exports.upload = async (req, res) => {
     try {
-        let resp = await imageService.upload(req.body.file);
+        console.log("req.file ...........................",req.file);
+        let resp = await imageService.upload(req.file);
         if (resp)
             return response("SUCCESS..!!", resp.data, 200, res);
         else
