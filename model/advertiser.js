@@ -39,23 +39,26 @@ const advertiserSchema = new Schema({
         type: Date, 
         required: true 
     },
-    emailVerified: { 
-        type:Boolean,
-        default:false 
-    },
+    // emailVerified: { 
+    //     type:Boolean,
+    //     default:false 
+    // },
     profilePic: { 
         type: String,  
-    },
-    panNumber:{
-        type:Number,
-        require:true
     },
     residentalAdress:{
         type:String,
         require:true
     },
-    city:{},
+    city:{
+        type: String,
+        require:true
+    },
     zipCode:{
+        type:Number,
+        require:true
+    },
+    panNumber:{
         type:Number,
         require:true
     },

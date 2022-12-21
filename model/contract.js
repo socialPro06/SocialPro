@@ -1,9 +1,9 @@
 const { model,Schema } = require("mongoose");
 
-const adsCreateSchema = new mongoose({
+const adsCreateSchema = new Schema({
     publisherId: { 
         type: Schema.Types.ObjectId, 
-        required: true, 
+        // required: true, 
     },
     title: { 
         type: String, 
@@ -14,7 +14,7 @@ const adsCreateSchema = new mongoose({
         required: true,
         trim:true 
     },
-    categories: { 
+    category: { 
         type: String, 
         required: true 
     },
@@ -36,7 +36,7 @@ const adsCreateSchema = new mongoose({
     },
     influencerId :{ 
         type: Schema.Types.ObjectId, 
-        required: true  
+        // required: true  
     }
 },{
     timestamps:true

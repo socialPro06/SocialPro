@@ -1,0 +1,61 @@
+influencer Register --->
+
+"userName" : "slok",
+"firstName":"slok",
+"lastName" : "vaghasiya",
+"emailId" :  "slokvaghasiya@gmail.com",
+"mobileNo" :1010101010,
+"profileUrl" : "abc",
+"password": "slok1234",
+"confirmPassword" : "slok1234",
+"gender":"male",
+"dob" : "2022-10-18T07:26:54.855+00:00"
+    
+
+advertiser Register --->
+
+"userName" : "slok",
+"firstName":"slok",
+"lastName" : "vaghasiya",
+"emailId" :  "slokvaghasiya@gmail.com",
+"mobileNo" :1010101010,
+"password": "slok1234",
+"confirmPassword" : "slok1234",
+"gender":"male",
+"dob" : "2022-10-18T07:26:54.855+00:00"
+"panNumber" :"123",
+"residentalAdress":"ABC",
+"zipCode":"456",
+"panImgFront":"PIF"    
+"panImgBack":"PIB"    
+
+
+  sendOtp: (mobile, email) => {
+    return new Promise(async (res, rej) => {
+      try {
+        var newOtpModel;
+        let otp = Math.floor(100000 + Math.random() * 900000);
+        if (email && mobile) {
+          newOtpModel = new otpModel({ mobile, email, otp });
+        } else if (mobile) {
+        newOtpModel = new otpModel({ mobile, otp });
+        } else {
+          newOtpModel = new otpModel({ email, otp });
+        }
+        let savedata = await newOtpModel.save();
+        setTimeout(async () => {
+          let deletedotp = await otpModel.findOneAndDelete({ otp: otp });
+        }, 5 * 60 * 1000);
+        if (savedata) {
+          res({ status: 200, data: otp });
+        } else {
+          rej({ status: 500, message: "something went wrong!!" });
+        }
+      } catch (err) {
+        rej({ status: 500, error: err, message: "something went wrong!!" });
+      }
+    });
+  },
+
+
+  password for OTP service ::: awcbhsynvlwzdmji

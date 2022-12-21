@@ -5,7 +5,7 @@ const categorySchema = new Schema({
         type: String, 
         required: true 
     },
-    adveCategoryId: { 
+    advCategoryId: { 
         type: Schema.Types.ObjectId, 
         required: true 
     },
