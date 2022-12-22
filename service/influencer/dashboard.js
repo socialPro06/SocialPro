@@ -9,13 +9,13 @@ module.exports = {
                 limit = parseInt(limit);
 
                 let getData = await contractModel.aggregate([
-                    {$facet : {
+                    { $facet : {
                         totalCount : [{ $group : { _id: null,count : { $sum:1 }} }],
                         result : [
-                            {$project : {__v:0 } },
-                            { $sort:{createdAt : -1} },
-                            { $skip: (page - 1)*limit},
-                            {$limit: limit},
+                            { $project : { __v:0 } },
+                            { $sort: { createdAt : -1 } },
+                            { $skip: (page - 1) * limit },
+                            { $limit: limit },
                         ],  
                     }}
                 ])
@@ -34,16 +34,38 @@ module.exports = {
     search:(str)=>{
         return new Promise (async (res,rej)=>{
             try {
-                let qry = {};
+                let qry = {};   
                 if(str){
                     qry["$or"] = [
                         {
-                            
+                            title : { $regex:str, $options: "i" } 
+                        },
+                        {    
+                            description : { $regex:str, $options: "i" } 
+                        },
+                        {    
+                            category : { $regex:str, $options: "i" }
+                        },
+                        {   
+                             city : { $regex:str, $options: "i" },
+                        },
+                        {    
+                            state: { $regex:str, $options: "i" }
                         }
-                    ]
-                }
-            } catch (err) {
+                    ];
+                 }
+                 let getData = await contractModel.aggregate( [ 
+                    { $match: qry },
+                    { $project: { __v:0 } }
                 
+                ] );
+                 if (getData) {
+                    res( { status:200, data: { result:getData } } );
+                 } else {
+                    rej({ status: 404, message: "No Data Found!!" });                   
+                 }
+            } catch (err) {
+                rej({status:500,error:err,message:"Something went wrong...!!"});
             }
         })
     }

@@ -41,7 +41,6 @@ byId: (id)=>{
 getAll: (page, limit, str) => {
     return new Promise(async (res, rej) => {
       try {
-        
         page = parseInt(page);
         limit = parseInt(limit);
         let getData = await influencerModel.aggregate([
