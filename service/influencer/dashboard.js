@@ -29,5 +29,22 @@ module.exports = {
                 rej({status:err?.status || 500,error:err,message:err?.message || "Something went wrong.."})
             }
         })
+    },
+
+    search:(str)=>{
+        return new Promise (async (res,rej)=>{
+            try {
+                let qry = {};
+                if(str){
+                    qry["$or"] = [
+                        {
+                            
+                        }
+                    ]
+                }
+            } catch (err) {
+                
+            }
+        })
     }
 }
