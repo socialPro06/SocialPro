@@ -8,5 +8,6 @@ dashboardRoute.get("/",(req,res)=>{
 })
 
 dashboardRoute.get('/dashboard',dashboardController.getAll)
+dashboardRoute.get('/search',dashboardController.search)
 
 module.exports = dashboardRoute;
