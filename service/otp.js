@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const path = require('path')
 const e = require('cors')
 require("dotenv").config({path: path.join(__dirname,'./config/.env')})
-
+   
 module.exports = {
 sendOtp: (emailId, mobileNo)=>{
         return new Promise (async(res , rej)=>{
