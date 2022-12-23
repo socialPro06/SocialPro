@@ -1,12 +1,10 @@
 const dashboardService = require("../../service/influencer/dashboard")
 const {response} = require('../../middleware/response')
-<<<<<<< HEAD
+// <<<<<<< HEAD
 // get all contracts to influencer dashboard
 exports.getAllData = async(req,res)=>{
-=======
 
 exports.getAll = async (req, res) => {
->>>>>>> 04c56dea50f77395e9bd38b3a16ac643c4091bee
     try {
       if (!req.query.page || !req.query.limit) {
         return response("pagination is require for pagination..!!", {}, 404, res);
@@ -17,12 +15,8 @@ exports.getAll = async (req, res) => {
           req.query.str
         );
         if (resp) {
-<<<<<<< HEAD
             console.log(resp);
             return response('data fetched',resp.data,200,res)
-=======
-          return response("SUCCESS..!!",resp, 200, res);
->>>>>>> 04c56dea50f77395e9bd38b3a16ac643c4091bee
         } else {
           return response("something went wrong!!",{}, 500, res);
         }
