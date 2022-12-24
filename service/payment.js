@@ -1,4 +1,4 @@
-const checksum_lib = require("../Paytm_payment_gateway/PaytmChecksum")
+const checksum_lib = require("../PaytmChecksum")
 const {response} = require('../middleware/response')
 
 port = 5000;
