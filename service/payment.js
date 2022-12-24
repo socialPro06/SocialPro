@@ -22,8 +22,8 @@ module.exports = {
             let TXN_URL = "Auto_generated";
             let form_fields = "";
             if (error) {
+                console.log(error)
                 return response(error.message,error?.error,error.status,res)
-                // console.log(error)
             } else {
                 for (x in form_fields) {
                     form_fields += "<input type='hidden' name='" + x + "' value='" + params[x] + "'/>"
