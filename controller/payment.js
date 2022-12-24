@@ -7,6 +7,7 @@ exports.payment = async (req, res)=>{
         if (payment) {
             return response("payment successfull..",{},200,res)
         } else {
+            // console.log(error)
             return response("transaction error..",{},500,res)
         }
         
