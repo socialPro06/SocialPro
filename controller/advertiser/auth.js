@@ -29,6 +29,7 @@ exports.login = async (req,res)=>{
         return response(err.message,err?.error,err.status,res)
     }
 }
+
 exports.forgot = async (req, res) => {
     try {
         let resp = await authService.forgot(req.body.emailId,req.body.otp,req.body.newPassword,req.body.confirmPassword)

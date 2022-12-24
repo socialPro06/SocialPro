@@ -7,7 +7,7 @@ const categorySchema = new Schema({
     },
     advCategoryId: { 
         type: Schema.Types.ObjectId, 
-        required: true 
+        // required: true 
     },
     status: { type:Boolean }
 })

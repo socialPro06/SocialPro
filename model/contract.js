@@ -18,6 +18,10 @@ const adsCreateSchema = new Schema({
         type: String, 
         required: true 
     },
+    images: { 
+        type: String, 
+        required: true 
+    },
     city:{ 
         type: String, 
         required: true 

@@ -4,23 +4,19 @@ const { model,Schema } = require("mongoose");
 const adsDetailSchema = new Schema({
     adsId: { 
         type: Schema.Types.ObjectId, 
-        required: true, 
+        // required: true, 
         unique: true 
     },
     influencerId: { 
         type: Schema.Types.ObjectId, 
-        required: true, 
+        // required: true, 
         unique: true 
-    },
-    images: { 
-        type: String, 
-        required: true 
     },
     status:{
         type:String,
         enum:[
             "request",
-            "pending",
+            "approve",
             "complete"
         ],
         default:'request'
