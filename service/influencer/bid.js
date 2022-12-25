@@ -27,13 +27,4 @@ makeBid :(amount)=>{
     })
 },
      
-cancleBid :()=>{
-    return new Promise(async(res,rej)=>{
-        try {
-            let cancleData = await bidModel.de
-        } catch (err) {
-            rej({ status: err?.status || 500, error: err, message: err?.message || "Something went wrong" })
-        }
-    })
-}
 }
