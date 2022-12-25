@@ -15,7 +15,8 @@ const bidSchema = new Schema({
     },
     status:{
         type:String,
-        enum:['request',"pending",'cancle']
+        enum:['request',"pending",'cancle'],
+        default:"request"
     }
 },{
     timestamps:true
