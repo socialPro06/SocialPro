@@ -26,7 +26,7 @@ makeBid :(amount)=>{
         }
     })
 },
-
+     
 cancleBid :()=>{
     return new Promise(async(res,rej)=>{
         try {
