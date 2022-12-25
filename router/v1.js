@@ -7,7 +7,7 @@ const advertiserRoute = require('./advertiser/advertiser.routes')
 const otpRoute = require('./otp')
 const commonRoute = require('./common')
 const imageRoute = require('./image')
-
+const paymentRoute = require("./Payment")
 v1.get("/",(req,res)=>{
     res.send({status:200,message:"v1 Route is working!!"})
 })
@@ -18,5 +18,6 @@ v1.use("/advertiser",advertiserRoute)
 v1.use("/otp",otpRoute)
 v1.use("/image",imageRoute)
 v1.use("/common",commonRoute)
+v1.use("/payment",paymentRoute)
 
 module.exports = v1;
