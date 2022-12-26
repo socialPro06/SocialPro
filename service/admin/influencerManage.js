@@ -23,8 +23,9 @@ byId: (id)=>{
         try {
             let data = await influencerModel.aggregate([
                 { $match:{_id:mongoose.Types.ObjectId(id) } },
-                { $project:{password:0 , __v: 0 } }
+                { $project:{ password:0 , __v: 0 } }
             ])
+            // console.log(data);
             if (data) {
                 res({status:200,data:{result:data}})
             } else {

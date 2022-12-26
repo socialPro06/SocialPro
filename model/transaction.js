@@ -3,11 +3,11 @@ const { model,Schema } = require("mongoose");
 const transactionSchema = new Schema({ 
     adsId:{ 
         type: Schema.Types.ObjectId, 
-        required: true,   
+        // required: true,   
     }, 
     publishedId:{ 
         type: Schema.Types.ObjectId, 
-        required: true, 
+        // required: true, 
     },
     amount:{ 
         type: Number, 

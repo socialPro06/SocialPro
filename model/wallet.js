@@ -3,7 +3,7 @@ const { model,Schema } = require("mongoose");
 const walletSchema = new mongoose.Schema({
     influencerId: { 
         type: Schema.Types.ObjectId, 
-        required: true, 
+        // required: true, 
         unique:true 
     },
     amount: { 
@@ -11,7 +11,7 @@ const walletSchema = new mongoose.Schema({
         required: true 
     },
     adsId: { 
-        type: String, 
+        type: Schema.Types.ObjectId, 
         requiredd: true, 
     },
     status: { 

@@ -13,3 +13,16 @@ exports.createPost = async(req,res)=>{
         return response(err.message,err?.error,err.status,res)
     }
 }
+
+exports.editPost = async(req,res)=>{
+    try {
+        let resp = await contractService.editPost(req.params._id,req.body);
+        if (resp) {
+            return response("Update Successfully...",resp.data,200,res);
+        } else {
+            return response("Update Fail..",{},500,res);
+        }
+    } catch (err) {
+        return response(err.message,err?.error,err.status,res);
+    }
+}

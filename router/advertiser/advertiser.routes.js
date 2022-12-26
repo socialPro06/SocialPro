@@ -6,6 +6,9 @@ const advertiserRoute = Router()
 
 const authRoute = require('./auth')
 const contractRoute = require('./contract')
+const profileRoute = require('./profile')
+const dashboardRoute = require('./dashboard')
+const contractReceiveRoute = require('./contractReceive')
 
 advertiserRoute.get('/',(req,res)=>{
     res.send({status:200,message:"Advertiser route is working..!!"})
@@ -13,5 +16,8 @@ advertiserRoute.get('/',(req,res)=>{
 
 advertiserRoute.use('/auth',authRoute)
 advertiserRoute.use('/post',contractRoute)
+advertiserRoute.use('/profile',profileRoute)
+advertiserRoute.use('/dashboard',dashboardRoute)
+advertiserRoute.use('/contractReceive',contractReceiveRoute)
 
 module.exports = advertiserRoute

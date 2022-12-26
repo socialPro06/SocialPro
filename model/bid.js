@@ -3,11 +3,11 @@ const {model,Schema} = require('mongoose')
 const bidSchema = new Schema({
     influencerId:{
         type: Schema.Types.ObjectId,
-        require:true
+        // require:true
     },
     adsId:{
         type: Schema.Types.ObjectId,
-        require:true
+        // require:true
     },
     bidAmount:{
         type:Number,
@@ -15,10 +15,11 @@ const bidSchema = new Schema({
     },
     status:{
         type:String,
-        enum:['request','approve','cancle']
+        enum:['request',"pending",'cancle'],
+        default:"request"
     }
 },{
     timestamps:true
 })
 
-module.exports = model('bidDetail',bidSchema)
+module.exports = model('bidDetail',bidSchema);

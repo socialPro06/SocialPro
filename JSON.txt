@@ -59,3 +59,10 @@ advertiser Register --->
 
 
   password for OTP service ::: awcbhsynvlwzdmji
+
+
+  1.. In advertiser --> 1.. Contract -- Update contract not working
+                        2.. Profile -- 
+
+  2.. In Admin --> influencerManage && advertiserManage - getAll not working
+  3.. In influencer -->   
