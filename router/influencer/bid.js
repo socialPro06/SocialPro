@@ -7,6 +7,6 @@ bidRoute.get('/',(req,res)=>{
     res.send({status:200,message:"Bid Route is working.."})
 })
 
-bidRoute.post("/makeBid",bidController.makeBid);
+bidRoute.post("/makeBid/:_id",bidController.makeBid);
 
 module.exports = bidRoute

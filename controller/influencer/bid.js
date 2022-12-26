@@ -2,7 +2,7 @@ const bidService = require('../../service/influencer/bid')
 const {response} = require('../../middleware/response')
 exports.makeBid =async (req,res)=>{
     try {
-        let resp = await bidService.makeBid(req.body);
+        let resp = await bidService.makeBid(req.params._id,req.body);
         if (resp) {
             return response("Success..",resp.data,200,res)
         } else {
