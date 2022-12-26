@@ -2,7 +2,7 @@ const dashboardService = require("../../service/influencer/dashboard")
 const { response } = require('../../middleware/response')
 // <<<<<<< HEAD
 // get all contracts to influencer dashboard
-exports.getAllData = async (req, res) => {
+
 
   exports.getAll = async (req, res) => {
     try {
@@ -15,14 +15,13 @@ exports.getAllData = async (req, res) => {
           req.query.str
         );
         if (resp) {
-          console.log(resp);
-          return response('data fetched', resp.data, 200, res)
+          return response('data fetched',resp.data,200, res)
         } else {
-          return response("something went wrong!!", {}, 500, res);
+          return response("something went wrong!!",{},500, res);
         }
       }
     } catch (err) {
-      return response(err.message, err?.error, err.status, res);
+      return response(err.message,err?.error,err.status,res);
     }
   };
 
@@ -32,10 +31,9 @@ exports.getAllData = async (req, res) => {
       if (resp) {
         return response("Success..", resp.data, 200, res);
       } else {
-        return response("Something Went wrong...", {}, 404, res);
+        return response("Something Went wrong...",{}, 404, res);
       }
     } catch (err) {
       return response(err.message, err?.error, err.status, res)
     }
   }
-}
