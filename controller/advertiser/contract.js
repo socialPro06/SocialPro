@@ -3,7 +3,7 @@ const {response} = require('../../middleware/response')
 
 exports.createPost = async(req,res)=>{
     try {
-        let resp = await contractService.createPost(req.body)
+        let resp = await contractService.createPost(req.params._id,req.body)
         if (resp) {
             return response('Post created...',resp.data,200,res)
         } else {
@@ -24,5 +24,31 @@ exports.editPost = async(req,res)=>{
         }
     } catch (err) {
         return response(err.message,err?.error,err.status,res);
+    }
+}
+
+exports.deletePost = async(req,res)=>{
+    try {
+        let resp = await contractService.deletePost(req.params._id)
+        if (resp) {
+            return response("Delete Successfully...",resp.data,200,res);
+        } else {
+            return response("Delete fails...",{},500,res);
+        }
+    } catch (err) {
+        
+    }
+}
+
+exports.getAllPost = async(req,res)=>{
+    try {
+        let resp = await contractService.getAllPost(req.params._id)
+        if (resp) {
+            return response("Delete Successfully...",resp.data,200,res);
+        } else {
+            return response("Delete fails...",{},500,res);
+        }
+    } catch (err) {
+        
     }
 }

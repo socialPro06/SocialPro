@@ -5,10 +5,12 @@ const adsDetailSchema = new Schema({
     adsId: { 
         type: Schema.Types.ObjectId, 
         // required: true, 
-        unique: true 
+        unique: true,
+        ref:"adsDetail" 
     },
     influencerId: { 
         type: Schema.Types.ObjectId, 
+        ref:"influencer",
         // required: true, 
         unique: true 
     },
@@ -16,7 +18,7 @@ const adsDetailSchema = new Schema({
         type:String,
         enum:[
             "request",
-            "approve",
+            "approve", 
             "complete"
         ],
         default:'request'
