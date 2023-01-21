@@ -13,8 +13,8 @@ commonOtp :(emailId)=>{
                 let otp = Math.floor(1000 + Math.random() * 1000);
                 let abc = `${otp}`
                 await mail(emailId,"This is simple Mail ",abc).then((data)=>{
-                let abc = "mail send";
-                res({ status: 200, data: abc });
+                let msg = "mail send";
+                res({ status: 200, data: msg });
                 })
                  
                 var newOtpModule = new otpModel({emailId , otp})                
@@ -28,7 +28,7 @@ commonOtp :(emailId)=>{
                     rej( { status:500 , message:"Something went wrong !!" } )
                 }
             } else {
-                rej({ status: 404, message: "Infuencer Email incorrect !!" })
+                rej({ status: 404, message: "Email incorrect !!" })
             }
         } catch (err) {
             rej({ status: 500, error: err, message: " something went wrong in service !!" });

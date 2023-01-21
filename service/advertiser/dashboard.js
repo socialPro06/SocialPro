@@ -1,7 +1,9 @@
 const influencerModel = require('../../model/influencer')
+const contractModel = require('../../model/contract');
+const { default: mongoose, get } = require('mongoose');
 
 module.exports = {
-    getAll : (page,limit,str)=>{
+    getAllInfluencer : (page,limit,str)=>{
         return new Promise (async (res,rej)=>{
             try {
                 page = parseInt(page);
@@ -12,7 +14,7 @@ module.exports = {
                         totalCount : [{ $group : { _id: null,count : { $sum:1 }} }],
                         result : [
                             { $match : {status:{ $regex : "complete" , $options:"i"}}},
-                            { $project : { __v:0 } },
+                            { $project : { __v:0,password:0,confirmPassword:0,_id:0 } },
                             { $sort: { createdAt : -1 } },
                             { $skip: (page - 1) * limit },
                             { $limit: limit },
@@ -20,7 +22,6 @@ module.exports = {
                     }}
                 ]);
                 getData = getData[0];
-                console.log(getData.result.status);
                 if (getData.result.length > 0) {
                     res({status:200,data:{totalCount: getData.totalCount[0].count,result:getData.result }})
                 } else {
@@ -31,7 +32,7 @@ module.exports = {
             }
         })
     },
-
+    
     search:(str)=>{
         return new Promise (async (res,rej)=>{
             try {
@@ -48,17 +49,16 @@ module.exports = {
                             lastName : { $regex:str, $options: "i" }
                         },
                         {   
-                             city : { $regex:str, $options: "i" },
+                            city : { $regex:str, $options: "i" },
                         },
                     ];
-                 }
-                 let getData = await influencerModel.aggregate( [ 
+                }
+                let getData = await influencerModel.aggregate([
                     { $match: qry },
-                    { $project: { __v:0 } }
-                
-                ] );
+                    { $project : { __v:0, password:0, confirmPassword:0, _id:0 } },
+                 ]);
                  if (getData) {
-                    res( { status:200, data: { result:getData } } );
+                    res( { status:200, data:getData } );
                  } else {
                     rej({ status: 404, message: "No Data Found!!" });                   
                  }
@@ -66,5 +66,36 @@ module.exports = {
                 rej({status:500,error:err,message:"Something went wrong...!!"});
             }
         })
-    }
+    },
+
+getAllPost:(publisher_Id)=>{
+    return new Promise(async(res,rej)=>{
+        try {
+            let getData = await contractModel.aggregate([
+                { $match: { publisherId : mongoose.Types.ObjectId(publisher_Id) } },
+                { $facet : {
+                    totalCount : [{ $group : { _id: null,count : { $sum:1 }} }],
+                    result : [
+                        { $project : { __v:0 } },
+                        { $sort: { createdAt : -1 } }
+                    ],  
+                }}
+            ])
+            getData = getData[0]
+            if (getData.totalCount.length > 0) {
+                // res({status:200,data:getData} )
+                res({
+                    status:200,
+                    data: { 
+                        totalCount:getData.totalCount[0].count,
+                        result:getData.result 
+                    } } )
+            } else {
+                rej({status:404,message:"No Data Found..."})
+            }
+        } catch (err) {
+            rej({status:500,error:err,message:"Something went wrong...."})
+        }
+    })
+}
 }

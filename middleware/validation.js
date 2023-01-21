@@ -2,6 +2,7 @@ const {response} = require('../middleware/response')
 const adminModel = require('../model/admin')
 const influencerModel = require('../model/influencer')
 const advertiserModel = require('../model/advertiser')
+const bidModel = require('../model/bid')
 
 getResult = async (result,res,next)=>{
     try{
@@ -87,5 +88,18 @@ exports.advertiserEmailCheck = async (req,res,next)=>{
             next();
     } catch (err) {
         return response("Something went wrong !!",err,500,res);
+    }
+}
+
+exports.bidInfluencerCheck = async (req,res,next)=>{
+    try {
+        let isId = await bidModel.findOne({adsId:req.query._id1,influencerId:req.query._id2})
+        if (isId) {
+            return response("Influencer already bid on This Contract...",{},400,res)
+        } else {
+            next()
+        }
+    } catch (err) {
+        return response("Something went Wrong..",err,500,res)
     }
 }

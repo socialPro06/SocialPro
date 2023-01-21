@@ -41,6 +41,10 @@ const adsCreateSchema = new Schema({
     influencerId :{ 
         type: Schema.Types.ObjectId, 
         // required: true  
+    },
+    influencerCounte: {
+        type:Number,
+        default:0
     }
 },{
     timestamps:true

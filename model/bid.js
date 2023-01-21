@@ -1,11 +1,11 @@
 const {model,Schema} = require('mongoose')
 
 const bidSchema = new Schema({
-    influencerId:{
+    adsId:{
         type: Schema.Types.ObjectId,
         // require:true
     },
-    adsId:{
+    influencerId:{
         type: Schema.Types.ObjectId,
         // require:true
     },

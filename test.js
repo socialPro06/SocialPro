@@ -9,7 +9,7 @@ async function start(name) {
   const page = await browser.newPage()
 
   
-  await page.goto(`https://www.instagram.com/${name}`)
+  await page.goto(`https://instagram.com/${name}`)
 
   //rutu
   let profileImage = await page.evaluate(() => {
@@ -38,7 +38,7 @@ async function start(name) {
 
   let followerNumber = await page.evaluate(() => {
     let a = Array.from(document.querySelectorAll("._ac2a")).map(e=>e.textContent)[2].toString();
-    return a
+    return a   
   })
   console.log("followerNumber .............",followerNumber)
 
@@ -52,4 +52,4 @@ async function start(name) {
   await browser.close()
 }
 
-start("unsw")
+start("sarcastic_us")
