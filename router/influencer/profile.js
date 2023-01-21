@@ -9,5 +9,6 @@ profileRoute.get('/',(req,res)=>{
 
 profileRoute.get('/getprofile/:id',profileController.getProfile)
 profileRoute.put('/updateProfile/:_id',profileController.update)
+profileRoute.put('/resetPass',profileController.resetPass)
 
 module.exports = profileRoute

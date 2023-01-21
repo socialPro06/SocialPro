@@ -1,24 +1,31 @@
 const bidModel = require('../../model/bid')
+const { findByIdAndUpdate } = require('../../model/contract')
 const contractModel = require('../../model/contract')
 const contractReceiveModel = require('../../model/contractReceive')
 const influencerModel = require('../../model/influencer')
 
 module.exports = {
-makeBid :(id1,id2,data)=>{
+makeBid :(ads_id,influ_id,data)=>{
     return new Promise(async(res,rej)=>{
         try {
-            let getData = await contractModel.findById(id1);
+            let getData = await contractModel.findById(ads_id);
             if (getData) {
-                data["adsId"] = id1;
-                data["influencerId"] = id2;
+                if(getData.influencerCounte >= 10){
+                    rej({status:400,message:"You can't bid...."})
+                }
+                    data["adsId"] = ads_id;
+                    data["influencerId"] = influ_id;
                     let newbidModel = new bidModel(data);
                     let saveData = newbidModel.save();
+                    
                     if (saveData) {  
+                        let count = getData.influencerCounte + 1;
+                        let newcontractModel =await contractModel.findByIdAndUpdate(ads_id,{influencerCounte: count},{new:true})
                         res({status:200,data:"Bid successfull"});
                     } else {
                         rej({status:400,message:"Bid Fails"});
                     }
-                    let newcontractReceiveModel = new contractReceiveModel(newData);
+                    let newcontractReceiveModel = new contractReceiveModel(data);
                     let saveData2 = newcontractReceiveModel.save();
                     if (saveData2) {  
                         res({status:200,data:""});
@@ -34,11 +41,11 @@ makeBid :(id1,id2,data)=>{
     })
 },
 
-updateBid:(id1,id2,data)=>{
+updateBid:(ads_id,influ_id,data)=>{
     return new Promise(async(res,rej)=>{
         try {
             let updateData = await bidModel.findOneAndUpdate(
-                {adsId:id1,influencerId:id2},
+                {adsId:ads_id,influencerId:influ_id},
                 data,
                 {new:true}
             )
@@ -53,11 +60,13 @@ updateBid:(id1,id2,data)=>{
     })
 }, 
 
-cancelBid:(id1,id2)=>{
+cancelBid:(ads_id,influ_id)=>{
     return new Promise(async(req,res)=>{
         try {
+            let count = getData.influencerCounte - 1;
+            let newcontractModel =await findByIdAndUpdate(ads_id,{influencerCounte: count},{new:true})
             let cancelData = await bidModel.findByIdAndDelete(
-                { adsId:id1, influencerId:id2 },
+                { adsId:ads_id, influencerId:influ_id },
                 { new:true }
                 )
                 if (cancelData) {
@@ -66,7 +75,7 @@ cancelBid:(id1,id2)=>{
                 rej({status:200,data:"Invalid Id"})
             }
             let cancelData2 = await contractReceiveModel.findByIdAndDelete(
-                { adsId:id1, influencerId:id2 },
+                { adsId:ads_id, influencerId:influ_id },
                 { new:true }
                 )
                 if (cancelData2) {

@@ -35,7 +35,7 @@ editPost:(_id,data)=>{
     })
 },
 
-deletePost:(_id,data)=>{
+deletePost:(_id)=>{
     return new Promise(async (res,rej)=>{
         try {
             let deleteData = await contractModel.findByIdAndDelete(_id)
@@ -56,54 +56,4 @@ deletePost:(_id,data)=>{
     })
 },
  
-getAllPost: (id)=>{
-    return new Promise( async(res,rej)=>{
-        try {
-            let getData = await contractModel.aggregate([
-                {
-                    $match : {
-                        publisherId:id,
-                    }
-                },
-                {
-                    $facet: {
-                        totalCount:[
-                            {
-                                $group:{
-                                    _id:null,
-                                    count: { $sum: 1}
-                                }
-                            }
-                        ],
-                        result:[
-                        {
-                            $project:{
-                                __v:0,
-                            }
-                        },
-                        { $sort: { createdAt: -1} }
-                    ]
-                    }
-                }
-            ]);
-            getData = getData[0];
-            if (getData.result.length > 0) {
-                res({
-                    status:200,
-                    data:{
-                        totalCount: getData.totalCount[0].count,
-                        result: getData.result
-                    }
-                })
-            } else {
-                rej({status:404,message:"Data not Found..."})
-            }
-        } catch (err) {
-            rej( { status:err?.status || 500,
-                   error:err,
-                   message:err?.message || "Something Went Wrong.." } )
-        }
-    })
-}
-
 }

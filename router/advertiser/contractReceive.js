@@ -7,6 +7,8 @@ contractReceiveRoute.get('/',(req,res)=>{
     res.send({status:200,message:"contractReceive Route is working.."})
 })
 
-contractReceiveRoute.get('/contractReceive/:_id',contractReceiveController.byId);
+contractReceiveRoute.get('/byId/:_id',contractReceiveController.byId);
+contractReceiveRoute.put('/approveRequest',contractReceiveController.approveRequest)
+contractReceiveRoute.put('/cancelRequest',contractReceiveController.cancleRequest)
 
 module.exports = contractReceiveRoute

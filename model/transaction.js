@@ -9,6 +9,10 @@ const transactionSchema = new Schema({
         type: Schema.Types.ObjectId, 
         // required: true, 
     },
+    influencerId:{ 
+        type: Schema.Types.ObjectId, 
+        // required: true, 
+    },
     amount:{ 
         type: Number, 
         required: true 

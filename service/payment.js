@@ -2,7 +2,7 @@ const checksum_lib = require('paytmchecksum')
 // const checksum_lib = require("../PaytmChecksum")
 const {response} = require('../middleware/response')
 
-port = 5000;
+// port = 5000;
 
 module.exports = {
 

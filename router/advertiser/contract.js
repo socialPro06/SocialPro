@@ -10,6 +10,5 @@ contractRoute.get('/',(req,res)=>{
 contractRoute.post('/createPost/:_id',contractController.createPost)
 contractRoute.put('/editPost/:_id',contractController.editPost);
 contractRoute.delete('/deletePost/:_id',contractController.deletePost)
-contractRoute.get('/getAllPost/:_id',contractController.getAllPost)
 
 module.exports = contractRoute;

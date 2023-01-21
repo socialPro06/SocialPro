@@ -12,11 +12,43 @@ exports.byId = async (req,res)=>{
                   req.query.limit
                 );
         if (resp) {
-            return response("Bid Success...",{},200,res);
+            return response("Bid details...",resp.data,200,res);
         } else {
-            return response("Bid Fails...",{},400,res);
+            return response("Not Found...",{},400,res);
         }
     }
+    } catch (err) {
+        return response(err.message,err?.error,err.status,res);
+    }
+}
+
+exports.approveRequest = async (req,res)=>{
+    try {
+        let resp = await contractReceiveService.approveRequest(
+            req.query.ads_Id,
+            req.query.influ_Id
+        );
+        if (resp) {
+            return response("Contract Approve...",resp.data,200,res);
+        } else {
+            return response("Contract Not Approve",{},400,res);
+        }
+    } catch (err) {
+        return response(err.message,err?.error,err.status,res);
+    }
+}
+
+exports.cancleRequest = async (req,res)=>{
+    try {
+        let resp = await contractReceiveService.cancleRequest(
+            req.query.ads_Id,
+            req.query.influ_Id
+        );
+        if (resp) {
+            return response("Contract Cancle",resp.data,200,res);
+        } else {
+            return response("Contract Not Cancle",{},400,res);
+        }
     } catch (err) {
         return response(err.message,err?.error,err.status,res);
     }

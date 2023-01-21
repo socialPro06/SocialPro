@@ -3,7 +3,7 @@ const {response} = require('../../middleware/response')
 
 exports.makeBid =async (req,res)=>{
     try {
-        let resp = await bidService.makeBid(req.query._id1,req.query._id2,req.body);
+        let resp = await bidService.makeBid(req.query.ads_id,req.query.influ_id,req.body);
         if (resp) {
             return response("Success..",resp.data,200,res)
         } else {
@@ -16,7 +16,7 @@ exports.makeBid =async (req,res)=>{
 
 exports.updateBid = async(req,res)=>{
     try {
-        let resp = await bidService.updateBid(req.query._id1,req.query._id2,req.body);
+        let resp = await bidService.updateBid(req.query.ads_id,req.query.influ_id,req.body);
         if (resp) {
             return response("Update Success..",resp.data,200,res)
         } else {
@@ -29,13 +29,13 @@ exports.updateBid = async(req,res)=>{
 
 exports.cancelBid = async(req,res)=>{
     try {
-        let resp = await bidService.cancelBid(req.query._id1,req.query._id2);
+        let resp = await bidService.cancelBid(req.query.ads_id,req.query.influ_id);
         if (resp) {
             return response("Cancel Success..",resp.data,200,res)
         } else {
             return response("Cancel Fails...",{},500,res)
         }
     } catch (err) {
-        
+        return response(err.message, err?.error, err.status, res)
     }
 }
