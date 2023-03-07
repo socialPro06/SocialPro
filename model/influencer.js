@@ -74,12 +74,6 @@ const influencerSchema = new Schema({
         type:Number,
         require:true
     },
-    // latitude:{
-    //     type:String
-    // },
-    // longitude: {
-    //     type:String
-    // },
     status: {
         type:String,
         enum:['pending','complete'],

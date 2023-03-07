@@ -1,4 +1,5 @@
 const contractModel = require("../../model/contract")
+const advertiserModel = require('../../model/advertiser')
 
 module.exports = {
     getAll : (page,limit,str)=>{
@@ -56,7 +57,6 @@ module.exports = {
                  let getData = await contractModel.aggregate( [ 
                     { $match: qry },
                     { $project: { __v:0 } }
-                
                 ] );
                  if (getData) {
                     res( { status:200, data: { result:getData } } );
@@ -67,5 +67,5 @@ module.exports = {
                 rej({status:500,error:err,message:"Something went wrong...!!"});
             }
         })
-    }
+    },
 }

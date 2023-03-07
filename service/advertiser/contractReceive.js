@@ -97,12 +97,25 @@ try {
 cancleRequest:(ads_Id,influ_Id)=>{
     return new Promise(async (res,rej)=>{
         try {
-            let getData = await contractModel.findOne({adsId:ads_Id})
+            let getData = await contractModel.findById(ads_Id)
             if (getData) {
-                let updateData1 = await contractReceiveModel.findOneAndDelete({adsId:ads_Id,influecerId:influ_Id})
+                let updateData1 = await contractReceiveModel.findOneAndDelete({adsId:ads_Id,influencerId:influ_Id})
+                if(!updateData1){
+                    rej({status:404,message:"Contract Not Cancel..."})
+                }
+
                 let updateData2 = await bidModel.findOneAndUpdate({adsId:ads_Id,influecerId:influ_Id},{status:"cancle"},{new:true});
-                if (updateData1 && updateData2) {
-                    let getData1 = await influencerModel.findOne({_id:influ_Id})
+                if(!updateData2){
+                    rej({status:404,message:"Bid not Found"})
+                }
+                
+                let count = getData.influencerCounte - 1;
+                let updateData3 =await contractModel.findByIdAndUpdate(ads_Id,{influencerCounte: count},{new:true})
+                if(!updateData3){
+                    rej({status:404,message:"Contract Not Update"})
+                }
+                
+                let getData1 = await influencerModel.findOne({_id:influ_Id})
                 if (getData1) {
                 // console.log("data...",getData1);
                 await mail(getData1.emailId,`Your Contract has been Cancel `,getData.title).then(()=>{
@@ -110,9 +123,6 @@ cancleRequest:(ads_Id,influ_Id)=>{
                 })
                 }
                     res({status:200,data:"Conract Cancle..."})
-                } else {
-                    rej({status:404,message:"Bind not Found..."})
-                }
             } else {
                 rej({status:404,message:"Contract Not Found..."})
             }

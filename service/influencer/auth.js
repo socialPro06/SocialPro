@@ -182,7 +182,7 @@ scrape:(userName)=>{
         
           await browser.close()
         }
-        start(userName)
+        start(userName);
     } catch (err) {
         console.log("Error....", err)
             rej({ status: 500, error: err, message: "Something went Wrong.." })
