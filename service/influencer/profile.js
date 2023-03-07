@@ -9,7 +9,7 @@ getProfile:(userId)=>{
             if (getData) {
                 res( { status:200,data:getData } )
             } else {
-                rej( {status:404,message:"advertiser not found..!!"});
+                rej( {status:404,message:"Influencer not found..!!"});
             }
         } catch (err) {
             rej( {status:err?.status || 500,error:err,message:err?.message || "Something Went wrong...!!"} )
@@ -24,7 +24,7 @@ update: async (_id, data) => {
             if (getData) {
               res({ status: 200, data: "Profile update" });
             } else {
-              rej({ status: 404, message: "Invalid  Adver id!!" });
+              rej({ status: 404, message: "Invalid  Influ id!!" });
             }
           } catch (err) {
             console.log("err", err);

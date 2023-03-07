@@ -5,8 +5,8 @@ module.exports = {
     update: async(_id,data)=>{
         return new Promise (async (res,rej)=>{
             try {
-                let detData = await influencerModel.findByIdAndUpdate(_id,data,{ new:true });
-                if (detData) {
+                let getData = await influencerModel.findByIdAndUpdate(_id,data,{ new:true });
+                if (getData) {
                     res({status:200,data:" "})
                 } else {
                     res({status:404,message:"Influ.. Id invalid .. !!"})

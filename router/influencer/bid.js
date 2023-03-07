@@ -8,7 +8,7 @@ bidRoute.get('/',(req,res)=>{
     res.send({status:200,message:"Bid Route is working.."})
 })
 
-bidRoute.post("/makeBid",bidInfluencerCheck,bidController.makeBid);
+bidRoute.post("/makeBid",bidController.makeBid);
 bidRoute.put("/updatebid",bidController.updateBid)
 bidRoute.delete("/cancelBid",bidController.cancelBid)
 

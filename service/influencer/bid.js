@@ -25,12 +25,13 @@ makeBid :(ads_id,influ_id,data)=>{
                     } else {
                         rej({status:400,message:"Bid Fails"});
                     }
+
                     let newcontractReceiveModel = new contractReceiveModel(data);
                     let saveData2 = newcontractReceiveModel.save();
                     if (saveData2) {  
                         res({status:200,data:""});
                     } else {
-                        rej({status:400,message:"Received Contract Fails"});
+                        rej({status:400,message:"Contract Not Received.."});
                     }
             } else {
                 rej({status:404,message:"Contract Not Found..."});

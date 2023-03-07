@@ -1,15 +1,15 @@
 const puppeteer = require('puppeteer')
 
-async function start(name) {
+async function start(name) { 
   const browser = await puppeteer.launch({
     headless: false,
-    // slowMo: 500,
+    // slowMo: 100,
     devtools: false,
   });
   const page = await browser.newPage()
 
-  await page.goto(`https://www.instagram.com/${name}/`)
-  // await page.screenshot({path: "abc.png", fullPage:true })
+  
+  await page.goto(`https://instagram.com/${name}`)
 
   //rutu
   let profileImage = await page.evaluate(() => {
@@ -38,9 +38,15 @@ async function start(name) {
 
   let followerNumber = await page.evaluate(() => {
     let a = Array.from(document.querySelectorAll("._ac2a")).map(e=>e.textContent)[2].toString();
-    return a
+    return a   
   })
   console.log("followerNumber .............",followerNumber)
+
+  if (followerNumber <= 10000) {
+    console.log("Fails");
+  } else {
+    console.log("Pass");
+  }
 
   let bio = await page.evaluate(() => {
     let a = Array.from(document.querySelectorAll("._aa_c ._aade")).map(e=>e.textContent).toString();
@@ -52,4 +58,4 @@ async function start(name) {
   await browser.close()
 }
 
-start("status_world_2143")
+start("tokyorevanger")
