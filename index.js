@@ -5,7 +5,6 @@ const path = require('path')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const v1 = require('./router/v1')
-const port = 5000;
 require("dotenv").config({ path: path.join(__dirname, "./config/.env") });
 
 app.use(express.json())
@@ -23,7 +22,7 @@ mongoose.connect(process.env.DATABSE_CONNECTION, async (err, result) => {
         console.log(err)
     }
     else {
-        app.listen(port, () => {
+        app.listen(process.env.PORT, () => {
             console.log("connection on PORT ", process.env.PORT)
             console.log("Mongo DB connect")
         })
