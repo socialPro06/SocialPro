@@ -62,7 +62,7 @@ updateBid:(ads_id,influ_id,data)=>{
 }, 
 
 cancelBid:(ads_id,influ_id)=>{
-    return new Promise(async(req,res)=>{
+    return new Promise(async(rej,res)=>{
         try {
             let count = getData.influencerCounte - 1;
             let newcontractModel =await findByIdAndUpdate(ads_id,{influencerCounte: count},{new:true})
