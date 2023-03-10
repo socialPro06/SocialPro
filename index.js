@@ -24,7 +24,7 @@ mongoose.connect(process.env.DATABSE_CONNECTION, async (err, result) => {
     }
     else {
         app.listen(port, () => {
-            console.log("connection on PORT ", process.env.PORT)
+            console.log("connection on PORT ", port)
             console.log("Mongo DB connect")
         })
     }
