@@ -5,7 +5,7 @@ const transactionSchema = new Schema({
         type: Schema.Types.ObjectId, 
         // required: true,   
     }, 
-    publishedId:{ 
+    contractId:{ 
         type: Schema.Types.ObjectId, 
         // required: true, 
     },

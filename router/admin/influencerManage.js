@@ -8,6 +8,7 @@ influManageRoute.get("/",(req,res)=>{
 
 influManageRoute.put("/update/:_id",influManageController.update)
 influManageRoute.get("/getAll",influManageController.getAll)
+influManageRoute.get("/getData",influManageController.getData)
 influManageRoute.get("/byId/:_id",influManageController.byId)
 influManageRoute.delete("/delete/:_id",influManageController.delete)
 

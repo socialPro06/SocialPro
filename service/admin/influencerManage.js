@@ -9,7 +9,7 @@ module.exports = {
                 if (getData) {
                     res({status:200,data:" "})
                 } else {
-                    res({status:404,message:"Influ.. Id invalid .. !!"})
+                    rej({status:404,message:"Influ.. Id invalid .. !!"})
                 }
             } catch (err) {
                 console.log("Error...",err)
@@ -29,7 +29,7 @@ byId: (id)=>{
             if (data) {
                 res({status:200,data:{result:data}})
             } else {
-                res({status:404,message:"Influ... Not found !! ",error:{}})
+                rej({status:404,message:"Influ... Not found !! ",error:{}})
             }
             rej({status: 404,message: "User Not Found, Invalid id!!",error: {}});
         } catch (err) {
@@ -70,6 +70,7 @@ getAll: (page, limit, str) => {
     });
   },
 
+
 delete: (_id)=>{
     return new Promise(async (res,rej)=>{
         try {
@@ -77,10 +78,26 @@ delete: (_id)=>{
             if (deleteData) {
                 res({status:200,data:"Influ.. data deleted !!"})
             } else {
-                res({status:404,message:"Influ.. Invalid Id !!"})
+                rej({status:404,message:"Influ.. Invalid Id !!"})
             }
         } catch (err) {
             console.log("Error...",err)
+            rej({status:500,error:err,message:"Something Went Wrong !!"})
+        }
+    })
+},
+
+getData:()=>{
+    return new Promise(async(res,rej)=>{
+        try {
+            let getData1 = await influencerModel.find({});
+            if (getData1) {
+                res({status:200,data:getData1})
+            } else {
+                res({status:400,message:"No Any data Yet..."})
+                
+            }
+        } catch (err) {
             rej({status:500,error:err,message:"Something Went Wrong !!"})
         }
     })

@@ -78,7 +78,7 @@ try {
                     res({ status: 200, data: "Mail Has too be sent..." });
                 })
             }
-            res({status:200,data:updateData})
+            res({status:200,data:"data updated"})
         } else {
             rej({status:404,message:"Contract Not Approve.."});
         }
