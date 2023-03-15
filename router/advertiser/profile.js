@@ -1,5 +1,4 @@
 const { Router } = require('express');
-const { models } = require('mongoose');
 const profileController = require('../../controller/advertiser/profile')
 
 

@@ -81,6 +81,22 @@ delete: (_id) => {
             rej({ status: 500, error: err, message: "Something Went Wrong !!" })
         }
     })
+},
+
+getData:()=>{
+    return new Promise(async(res,rej)=>{
+        try {
+            let getData1 = await advertiserModel.find({});
+            if (getData1) {
+                res({status:200,data:getData1})
+            } else {
+                res({status:400,message:"No Any data Yet..."})
+                
+            }
+        } catch (err) {
+            rej({status:500,error:err,message:"Something Went Wrong !!"})
+        }
+    })
 }
 }
 

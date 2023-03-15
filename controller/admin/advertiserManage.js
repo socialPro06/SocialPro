@@ -63,3 +63,17 @@ exports.delete = async (req,res)=>{
         return response(err.message,err?.error,err.status,res)
     }
 }
+
+exports.getData = async (req,res)=>{
+  try {
+    let resp = await advertiserService.getData();
+    if (resp) {
+      return response("Adver.. Data !! ",resp.data,200,res)
+  } else {
+      return response("Adver.. Not Found !!",{},500,res)
+  }
+  } catch (err) {
+return response(err.message,err?.error,err.status,res)
+
+}
+}
