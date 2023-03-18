@@ -3,6 +3,7 @@ const adminModel = require('../model/admin')
 const influencerModel = require('../model/influencer')
 const advertiserModel = require('../model/advertiser')
 const bidModel = require('../model/bid')
+const blockUserModel = require('../model/blockUser');
 
 getResult = async (result,res,next)=>{
     try{
@@ -101,5 +102,18 @@ exports.bidInfluencerCheck = async (req,res,next)=>{
         }
     } catch (err) {
         return response("Something went Wrong..",err,500,res)
+    }
+}
+
+exports.blockUser = async (req,res,next)=>{
+    try {
+        let isId = await blockUserModel.findOne({emailId:req.body.usedId,mobileNo:req.body.mobileNo})
+        if (isId) {
+            return response("You are Blocked By system..",{},400,res);
+        } else {
+            next();
+        }
+    } catch (err) {
+        return response("Something went Wrong...",err,500,res);
     }
 }

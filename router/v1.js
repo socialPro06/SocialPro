@@ -8,6 +8,7 @@ const otpRoute = require('./otp')
 const commonRoute = require('./common')
 const imageRoute = require('./image')
 
+
 v1.get("/",(req,res)=>{
     res.send({status:200,message:"v1 Route is working!!"})
 })

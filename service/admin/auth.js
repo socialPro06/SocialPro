@@ -11,7 +11,7 @@ register: (data)=>{
             if(saveData){
                 res({status:200,data:"Admin Registered Successfuly !!"})
             }else {
-                rej({status:404, message:"Something went wrong !!"})
+                rej({status:500, message:"Something went wrong !!"})
             }        
         } catch (err) {
                 console.log('Error...')
