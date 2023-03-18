@@ -70,6 +70,11 @@ const advertiserSchema = new Schema({
         type:String,
         require:true
     },
+    status: {
+        type:String,
+        enum:['pending','complete'],
+        default: 'pending'
+    }
     // latitude:{
     //     type:String
     // },

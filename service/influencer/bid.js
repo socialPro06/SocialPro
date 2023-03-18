@@ -3,6 +3,7 @@ const { findByIdAndUpdate } = require('../../model/contract')
 const contractModel = require('../../model/contract')
 const contractReceiveModel = require('../../model/contractReceive')
 const influencerModel = require('../../model/influencer')
+const mongoose = require('mongoose')
 
 module.exports = {
 makeBid :(ads_id,influ_id,data)=>{
@@ -15,6 +16,7 @@ makeBid :(ads_id,influ_id,data)=>{
                 }
                     data["adsId"] = ads_id;
                     data["influencerId"] = influ_id;
+                    data["publisherId"] = getData.publisherId;
                     let newbidModel = new bidModel(data);
                     let saveData = newbidModel.save();
                     
@@ -88,5 +90,61 @@ cancelBid:(ads_id,influ_id)=>{
             rej({ status: err?.status || 500, error: err, message: err?.message || "Something went wrong" })
         }
     })
-}
+},
+
+byId:(influ_id,page,limit)=>{
+    return new Promise (async (res,rej)=>{
+        try {
+            page = parseInt(page);
+            limit = parseInt(limit);
+            let getData = await bidModel.aggregate([
+                {
+                    $match: {
+                        influencerId: mongoose.Types.ObjectId(influ_id),
+                        status:"request"
+                    }
+                },
+                {
+                    $facet: {
+                        totalCount: [
+                            {
+                                $group: {
+                                    _id:null,
+                                    count: { $sum: 1}
+                                }
+                            }
+                        ],
+                        result: [
+                        {
+                            $project: {
+                                __v: 0,
+                            }
+                        },
+                        { $sort: { createdAt: -1 } },
+                        { $skip: (page - 1)*limit },
+                        { $limit: limit }
+                        ]
+                    }
+                }
+            ]);
+            getData = getData[0];
+            if (getData.result.length > 0) {
+                res({
+                    status:200,
+                    data: {
+                       totalCount: getData.totalCount[0].count,
+                       result: getData.result
+                    }
+                })
+            } else {
+                rej({status:404,message:"Data not Found..."})
+            }
+        } catch (err) {
+            rej( { status:err?.status || 500,
+                 error:err,
+                 message: err?.message || "Something went Wrong..."
+                } )
+        }
+    })
+},
 }

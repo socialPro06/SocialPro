@@ -1,5 +1,6 @@
 const influencerModel = require('../../model/influencer')
 const contractModel = require('../../model/contract');
+const contractReceiveModel = require('../../model/contractReceive')
 const { default: mongoose, get } = require('mongoose');
 
 module.exports = {
@@ -97,5 +98,20 @@ getAllPost:(publisher_Id)=>{
             rej({status:500,error:err,message:"Something went wrong...."})
         }
     })
+},
+
+allReqPost:(publisher_Id)=>{
+return new Promise(async (res,rej)=>{
+    try {
+        let getData = await contractReceiveModel.aggregate([
+            {
+                $match:{ publisherId: mongoose.Types.ObjectId(publisherId),status:""}
+            }
+        ])
+    } catch (err) {
+        
+    }
+})
 }
+
 }

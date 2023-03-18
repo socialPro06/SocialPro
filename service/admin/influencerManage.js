@@ -101,6 +101,21 @@ getData:()=>{
             rej({status:500,error:err,message:"Something Went Wrong !!"})
         }
     })
+},
+
+approve:(id)=>{
+    return new Promise(async (res,rej)=>{
+        try {
+            let getData = await influencerModel.findByIdAndUpdate(id,{status:"complete"},{new:true});
+            if (getData) {
+                res({status:200,data:"Influencer Status Updated.."});
+            } else {
+                rej({status:400,message:"Influencer not Found..."})
+            }
+        } catch (err) {
+            rej({status:500,error:err,message:"Something went wrong.."})
+        }
+    })
 }
 }
 

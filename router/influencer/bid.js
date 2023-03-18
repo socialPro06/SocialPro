@@ -11,5 +11,6 @@ bidRoute.get('/',(req,res)=>{
 bidRoute.post("/makeBid",bidController.makeBid);
 bidRoute.put("/updatebid",bidController.updateBid)
 bidRoute.delete("/cancelBid",bidController.cancelBid)
+bidRoute.get("/getById/:influ_id",bidController.byId)
 
 module.exports = bidRoute
