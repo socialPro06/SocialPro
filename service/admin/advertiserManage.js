@@ -97,6 +97,22 @@ getData:()=>{
             rej({status:500,error:err,message:"Something Went Wrong !!"})
         }
     })
+},
+
+
+approve:(id)=>{
+    return new Promise(async (res,rej)=>{
+        try {
+            let getData = await advertiserModel.findByIdAndUpdate(id,{status:"complete"},{new:true});
+            if (getData) {
+                res({status:200,data:"Advertiser Status Updated.."});
+            } else {
+                rej({status:400,message:"Advertiser not Found..."})
+            }
+        } catch (err) {
+            rej({status:500,error:err,message:"Something went wrong.."})
+        }
+    })
 }
 }
 

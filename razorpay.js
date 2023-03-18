@@ -7,13 +7,18 @@ require("dotenv").config({path: path.join(__dirname,"./config/.env")})
 // This razorpayInstance will be used to
 // access any resource from razorpay
 const razorpayInstance = new Razorpay({
-
-	// Replace with your key_id
 	key_id: process.env.key_id,
-
-	// Replace with your key_secret
 	key_secret: process.env.key_secret 
 });
+
+var option = {
+    amount: "",
+    currency:"INR",
+    receipt:"XYZ",
+    notes:{
+
+    },
+    }
 
 const app = express();
 app.use(express.json());
@@ -34,15 +39,9 @@ app.get('/', (req, res) => {
 
 //Inside app.js
 app.post('/createOrder', (req, res)=>{
-
-	// STEP 1:
 	const {amount,currency,receipt,notes} = req.body;	
-		
-	// STEP 2:	
 	razorpayInstance.orders.create({amount,currency,receipt,notes},
 		(err, order)=>{
-		
-		//STEP 3 & 4:
 		if(!err)
 			res.json(order)
 		else
@@ -52,6 +51,12 @@ app.post('/createOrder', (req, res)=>{
 });
 app.get('/getOrder', (req, res)=>{
 
-instance.orders.all(option)	
+	razorpayInstance.orders.all({option},
+		(err, order)=>{
+			if(!err)
+				res.json(order)
+			else
+				res.send(err);
+			})	
 		
 });

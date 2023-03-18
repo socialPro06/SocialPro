@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 
 app.get('/', (req, res) => {
-    res.status(200).json("Initial root for Social pro")
+    res.status(200).json("Initial root for Social pro");
 })
 
 

@@ -63,10 +63,11 @@ byId:(contractId,page,limit)=>{
     })
 },
 
+
 approveRequest:(ads_Id,influ_Id)=>{
 return new Promise(async (res,rej)=>{
 try {
-    let getData = await contractModel.findOne({adsId:ads_Id})
+    let getData = await contractModel.findById(ads_Id)
     if (getData) {
         let updateData1 = await contractReceiveModel.findOneAndUpdate({adsId:ads_Id,influecerId:influ_Id},{status:"approve"},{new:true});
         let updateData2 = await bidModel.findOneAndUpdate({adsId:ads_Id,influecerId:influ_Id},{status:"pending"},{new:true});
@@ -133,7 +134,8 @@ cancleRequest:(ads_Id,influ_Id)=>{
                 })   
         }
     })
-}
+},
+
 }
 
 

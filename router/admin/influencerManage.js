@@ -11,6 +11,7 @@ influManageRoute.get("/getAll",influManageController.getAll)
 influManageRoute.get("/getData",influManageController.getData)
 influManageRoute.get("/byId/:_id",influManageController.byId)
 influManageRoute.delete("/delete/:_id",influManageController.delete)
+influManageRoute.put("/aprove/:_id",influManageController.approve)
 
 module.exports = influManageRoute;
 

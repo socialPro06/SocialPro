@@ -6,6 +6,10 @@ const adsDetailSchema = new Schema({
         type: Schema.Types.ObjectId, 
          
     },
+    // publisherId: { 
+    //     type: Schema.Types.ObjectId, 
+    //     // required: true, 
+    // },
     influencerId: { 
         type: Schema.Types.ObjectId,  
     },
