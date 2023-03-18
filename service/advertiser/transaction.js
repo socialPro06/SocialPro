@@ -26,6 +26,7 @@ payBidAmount:(ads_Id,influ_id,contract_id,amount)=>{
     try {
     await razorpayInstance.orders.create(option,function(err,order){
     if(!err){
+        
     let data = {};
     data["adsId"] = ads_Id;
     data["influencerId"] = influ_id;
