@@ -37,19 +37,19 @@ module.exports = {
         })
     },
 
-    checkUserBlocked: (mobileNo, emailId) => {
-        return new Promise(async (res, rej) => {
-            try {
-                let user = await blockedUser.findOne({ mobileNo, emailId });
-                if (user) {
-                    rej({ status: 500, message: "mobileNo is blocked. !!" })
-                } else {
-                    res({ status: 200, data: user })
-                }
-            } catch (err) {
-                rej({ status: 500, error: err, message: " something went wrong !!" });
-            }
-        })
-    }
+    // checkUserBlocked: (mobileNo, emailId) => {
+    //     return new Promise(async (res, rej) => {
+    //         try {
+    //             let user = await blockedUser.findOne({ mobileNo, emailId });
+    //             if (user) {
+    //                 rej({ status: 500, message: "mobileNo is blocked. !!" })
+    //             } else {
+    //                 res({ status: 200, data: user })
+    //             }
+    //         } catch (err) {
+    //             rej({ status: 500, error: err, message: " something went wrong !!" });
+    //         }
+    //     })
+    // }
 
 }

@@ -51,7 +51,7 @@ const influencerSchema = new Schema({
         type: String,  
     },
     panNumber:{
-        type:Number,
+        type:String,
         require:true
     },
     panImgFront:{

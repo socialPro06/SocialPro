@@ -7,7 +7,7 @@ commonRoute.get('/', (req, res) => {
 })
 
 commonRoute.get('/influencerOtp', commonController.commonOtp)
-commonRoute.post('/checkUserBlock', commonController.checkBlockUser)
+// commonRoute.post('/checkUserBlock', commonController.checkBlockUser)
 // otpRouter.get('/verifyOtp',otpController.verifyOtp)
 
 module.exports = commonRoute;

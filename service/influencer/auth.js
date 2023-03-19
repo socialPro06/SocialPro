@@ -4,7 +4,7 @@ const { encrypt } = require('../../helper/encrypt-decrypt')
 const commonService = require('../common')
 const otpModel = require('../../model/otp')
 const puppeteer = require('puppeteer')
-// const blockedUserModel = require('../../model/blockUser')
+const blockUserModel = require('../../model/blockUser')
 
 module.exports = {
     register: (data) => {
@@ -198,7 +198,12 @@ module.exports = {
                 if (loginData) {
                     rej({ status: 404, message: "Email Already Exist !!" });
                 } else {
-                    res({ status: 200, data: loginData });
+                    let blockedEmail = await blockUserModel.findOne({ emailId });
+                    if (blockedEmail) {
+                        rej({ status: 404, message: "Email is Blocked !!" });
+                    } else {
+                        res({ status: 200, data: loginData });
+                    }
                 }
             } catch (error) {
                 rej({ status: 500, error: err, message: 'Something went wrong!!' });
@@ -213,7 +218,12 @@ module.exports = {
                 if (mobileNO) {
                     rej({ status: 400, message: "Mobile no is already exist." });
                 } else {
-                    res({ status: 200, data: mobileNO });
+                    let blockedMobile = await blockUserModel.findOne({ mobileNo });
+                    if (blockedMobile) {
+                        rej({ status: 400, message: "Mobile no is Blocked." });
+                    } else {
+                        res({ status: 200, data: mobileNO });
+                    }
                 }
             } catch (err) {
                 rej({ status: 500, error: err, message: 'Something went wrong!!' });

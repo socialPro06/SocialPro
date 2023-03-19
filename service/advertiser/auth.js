@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const { encrypt } = require('../../helper/encrypt-decrypt')
 const commonService = require('../common')
 const otpModel = require('../../model/otp')
+const blockUserModel = require("../../model/blockUser")
 
 module.exports = {
     register: (data) => {
@@ -119,7 +120,12 @@ module.exports = {
                 if (email) {
                     rej({ status: 404, message: "Email Already Exist !!" })
                 } else {
-                    res({ status: 200, data: email });
+                    let blockEmail = await blockUserModel.findOne({ emailId });
+                    if (blockEmail) {
+                        rej({ status: 404, message: "Email is Blocked !!" })
+                    } else {
+                        res({ status: 200, data: email });
+                    }
                 }
             } catch (error) {
                 rej({ status: 500, error: err, message: 'Something went wrong!!' });
@@ -134,7 +140,12 @@ module.exports = {
                 if (mobileNO) {
                     rej({ status: 400, message: "Mobile no is already exist." });
                 } else {
-                    res({ status: 200, data: mobileNO });
+                    let blockedMobile = await blockUserModel.findOne({ mobileNo });
+                    if (blockedMobile) {
+                        rej({ status: 400, message: "Mobile no is Blocked." });
+                    } else {
+                        res({ status: 200, data: mobileNO });
+                    }
                 }
             } catch (err) {
                 rej({ status: 500, error: err, message: 'Something went wrong!!' });
