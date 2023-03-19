@@ -14,6 +14,8 @@ authRoute.post("/login",authController.login);
 authRoute.post("/forgotPass",authController.forgot);
 authRoute.post("/changePass",verifyInfluencerToken,authController.changePass);
 authRoute.get("/scrape",authController.scrape);
+authRoute.post("/checkEmail",authController.checkEmail);
+authRoute.post("/checkMobile",authController.checkMobile);
 
 
 module.exports = authRoute;

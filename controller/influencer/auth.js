@@ -68,3 +68,28 @@ exports.scrape = async(req,res)=>{
         
     }
 }
+
+exports.checkEmail = async (req, res) => {
+    try {
+        let resp = await authService.checkEmail(req.body.emailId);
+        if (resp) {
+            return response("continue..!!", resp.data, 200, res);
+        } else {
+            return response("something went wrong.", {}, 500, res);
+        }
+    } catch (err) {
+        return response(err.message, err?.error, err.status, res);
+    }
+}
+exports.checkMobile = async (req,res)=>{
+    try {
+        let resp = await authService.checkMobile(req.body.mobileNo);
+        if (resp) {
+            return response("continue..!!", resp.data, 200, res);
+        } else {
+            return response("something went wrong.", {}, 500, res);
+        }
+    } catch (err) {
+        return response(err.message, err?.error, err.status, res);
+    }
+}
