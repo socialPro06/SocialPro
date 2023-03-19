@@ -14,10 +14,18 @@ block:(userId)=>{
             if (getData1) {
                 data = [];
                 data["emailId"] = getData1.emailId;
-                data["mobileNo"] = getData1.mobileNo
+                data["mobileNo"] = getData1.mobileNo;
+                data["_id"] = getData1._id;
                 let newblockUserModel = new blockUserModel(data)
                 let saveData = newblockUserModel.save();
                 if (saveData) {
+                    let deleteUser = await influencerModel.findByIdAndDelete(data["_id"]);
+                    if (deleteUser) {
+                        res({status:200,data:"User Removed...."})
+                        res({status:200,data:"User Blocked...."})
+                    } else {
+                        rej({status:500,message:"User not Block..."})
+                    }
                     res({status:200,data:"User Blocked...."})
                 } else {
                     rej({status:500,message:"User not Block..."})    
@@ -25,11 +33,18 @@ block:(userId)=>{
             } else if (getData2) {
                 data = [];
                 data["emailId"] = getData2.emailId;
-                data["mobileNo"] = getData2.mobileNo
+                data["mobileNo"] = getData2.mobileNo;
+                data["_id"] = getData2._id;
                 let newblockUserModel = new blockUserModel(data)
                 let saveData = newblockUserModel.save();
                 if (saveData) {
-                    res({status:200,data:"User Blocked...."})
+                    let deleteUser = await advertiserModel.findByIdAndDelete(data["_id"]);
+                    if (deleteUser) {
+                        res({status:200,data:"User Removed...."})
+                        res({status:200,data:"User Blocked...."})
+                    } else {
+                        rej({status:500,message:"User not Block..."}) 
+                    }
                 } else {
                     rej({status:500,message:"User not Block..."})    
                 }

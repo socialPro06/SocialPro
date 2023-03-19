@@ -4,6 +4,7 @@ const { encrypt } = require('../../helper/encrypt-decrypt')
 const commonService = require('../common')
 const otpModel = require('../../model/otp')
 const puppeteer = require('puppeteer')
+// const blockedUserModel = require('../../model/blockUser')
 
 module.exports = {
     register: (data) => {
@@ -195,7 +196,7 @@ module.exports = {
             try {
                 let loginData = await influencerModel.findOne({ emailId });
                 if (loginData) {
-                    rej({ status: 404, message: "Email Already Exist !!" })
+                    rej({ status: 404, message: "Email Already Exist !!" });
                 } else {
                     res({ status: 200, data: loginData });
                 }
@@ -218,5 +219,5 @@ module.exports = {
                 rej({ status: 500, error: err, message: 'Something went wrong!!' });
             }
         })
-    }
+    },
 }
