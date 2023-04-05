@@ -25,7 +25,7 @@ const influencerSchema = new Schema({
     },
     profileUrl: { 
         type: String, 
-        required: true 
+        // required: true 
     },
     password:{
         type: String, 
@@ -51,7 +51,7 @@ const influencerSchema = new Schema({
         type: String,  
     },
     panNumber:{
-        type:Number,
+        type:String,
         require:true
     },
     panImgFront:{

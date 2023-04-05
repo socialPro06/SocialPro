@@ -13,6 +13,8 @@ authRoute.post('/register',advertiserEmailCheck,authController.register)
 authRoute.post('/login',authController.login)
 authRoute.post("/forgotPass",authController.forgot);
 authRoute.post("/changePass",verifyAdvertiserToken,authController.changePass);
+authRoute.post("/checkEmail",authController.checkEmail);
+authRoute.post("/checkMobile",authController.checkMobile);
 
 module.exports = authRoute
 
