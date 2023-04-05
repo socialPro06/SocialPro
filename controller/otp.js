@@ -17,7 +17,7 @@ exports.sendOtp = async (req,res) =>{
 
 exports.verifyOtp = async(req,res)=>{
     try {
-        let resp = await otpService.verifyOtp(req.body.emailId,req.body.otp)
+        let resp = await otpService.verifyOtp(req.query.emailId,req.query.otp)
         if (resp) {
             return response("Successfull.. Otp!!",resp.token,200,res)
         } else {
