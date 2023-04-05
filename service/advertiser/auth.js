@@ -22,16 +22,37 @@ module.exports = {
         })
     },
 
-    login: (emailId, password) => {
-        return new Promise(async (res, rej) => {
-            try {
-                let loginData = await advertiserModel.findOne({ emailId, password })
-                if (loginData) {
-                    let key1 = process.env.ADVERTISER_ENCRYPTION_KEY
-                    let encryptAdvertiser = encrypt(loginData._id, key1)
-                    let encryptEmail = encrypt(loginData.emailId, key1)
-                    let encryptPass = encrypt(loginData.password, key1)
+login:(emailId , password)=>{
+    return new Promise(async (res,rej)=>{
+        try {
+            let loginData = await advertiserModel.findOne({emailId})
+            if (loginData) {
+                let key1 = process.env.ADVERTISER_ENCRYPTION_KEY
+                let encryptAdvertiser = encrypt(loginData._id,key1)
+                let encryptEmail = encrypt(loginData.emailId , key1)
+                let encryptPass = encrypt(loginData.password,key1)
+                
 
+                
+                let token = jwt.sign({
+                    advertiserId : encryptAdvertiser,
+                    emailId : encryptEmail,
+                    password : encryptPass
+                },
+                process.env.ADVERTISER_ACCESS_TOKEN,
+                {expiresIn:process.env.ADVERTISER_ACCESS_TIME}
+                )
+                
+                let data = {
+                    token : token,
+                    firstName : loginData.firstName,
+                    lastName : loginData.lastName,
+                    id: loginData._id 
+                };
+                res({status:200 , data : data})
+            } else {
+                rej({status:404, message:"Email or password incorrect !!"})
+=======
                     let token = jwt.sign({
                         advertiserId: encryptAdvertiser,
                         emailId: encryptEmail,

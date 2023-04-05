@@ -23,6 +23,9 @@ const transactionSchema = new Schema({
     orderId:{
         type:String
     },
+    paymentSignature:{
+        type:String
+    },
     status:{
         type:String,
         enum:[
@@ -35,5 +38,6 @@ const transactionSchema = new Schema({
 },{
     timestamps:true
 })
+
 
 module.exports = model('transaction',transactionSchema);

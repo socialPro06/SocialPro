@@ -1,10 +1,10 @@
 const { model,Schema } = require("mongoose");
 
-const walletSchema = new mongoose.Schema({
+const walletSchema = new Schema({
     influencerId: { 
         type: Schema.Types.ObjectId, 
-        // required: true, 
-        unique:true 
+        required: true, 
+        
     },
     amount: { 
         type: Number, 
@@ -12,14 +12,15 @@ const walletSchema = new mongoose.Schema({
     },
     adsId: { 
         type: Schema.Types.ObjectId, 
-        requiredd: true, 
+        required: true, 
     },
     status: { 
         type: String, 
         enum:[
             "pending",
             "complete"
-        ] 
+        ],
+        default:"pending" 
     },
 },{
     timestamps:true
