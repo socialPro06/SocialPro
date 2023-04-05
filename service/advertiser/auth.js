@@ -30,9 +30,6 @@ login:(emailId , password)=>{
                 let encryptAdvertiser = encrypt(loginData._id,key1)
                 let encryptEmail = encrypt(loginData.emailId , key1)
                 let encryptPass = encrypt(loginData.password,key1)
-                
-
-                
                 let token = jwt.sign({
                     advertiserId : encryptAdvertiser,
                     emailId : encryptEmail,
