@@ -16,7 +16,7 @@ exports.block = async (req,res)=>{
 
 exports.unblock = async (req,res)=>{
     try {
-        let resp = await blockUserService.block(req.params.userId)
+        let resp = await blockUserService.unblock(req.params.userId)
         if (resp) {
             return response("Successfully unblock...",{},200,res);
         } else {

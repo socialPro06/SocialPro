@@ -27,7 +27,7 @@ module.exports = {
         return new Promise(async (res, rej) => {
             try {
                 let loginData = await influencerModel.findOne({ emailId, password })
-                console.log(loginData)
+                // console.log(loginData)
                 if (loginData) {
                     if (loginData.status == 'complete') {
                         let key1 = process.env.INFLUENCER_ENCRYPTION_KEY
@@ -47,7 +47,8 @@ module.exports = {
                         let data = {
                             token: token,
                             firstName: loginData.firstName,
-                            lastName: loginData.lastName
+                            lastName: loginData.lastName,
+                            id: loginData._id
                         };
                         res({ status: 200, data: data })
                     } else {

@@ -100,18 +100,4 @@ getAllPost:(publisher_Id)=>{
     })
 },
 
-allReqPost:(publisher_Id)=>{
-return new Promise(async (res,rej)=>{
-    try {
-        let getData = await contractReceiveModel.aggregate([
-            {
-                $match:{ publisherId: mongoose.Types.ObjectId(publisherId),status:""}
-            }
-        ])
-    } catch (err) {
-        
-    }
-})
-}
-
 }

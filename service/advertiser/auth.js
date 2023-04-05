@@ -43,7 +43,8 @@ login:(emailId , password)=>{
                 let data = {
                     token : token,
                     firstName : loginData.firstName,
-                    lastName : loginData.lastName 
+                    lastName : loginData.lastName,
+                    id: loginData._id 
                 };
                 res({status:200 , data : data})
             } else {

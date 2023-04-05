@@ -1,7 +1,8 @@
 // Inside app.js
 const express = require('express');
 const Razorpay = require('razorpay');
-const path = require('path')
+const path = require('path');
+const { order } = require('./service/advertiser/transaction');
 require("dotenv").config({path: path.join(__dirname,"./config/.env")})
 
 // This razorpayInstance will be used to
@@ -60,3 +61,14 @@ app.get('/getOrder', (req, res)=>{
 			})	
 		
 });
+
+
+app.get('/fetchPayment',(req,res)=>{
+	razorpayInstance.payments.all({'expand[]':'card'},(err,order)=>{
+		if (!err) {
+			res.json(order)
+		} else {
+			res.send(err)
+		}
+	})
+})
