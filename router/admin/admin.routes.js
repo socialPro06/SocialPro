@@ -15,6 +15,7 @@ adminRoute.use("/auth",authRoute);
 // adminRoute.use('/influManage',verifyAdminToken,influManageRoute)
 adminRoute.use('/influManage',influManageRoute)
 // adminRoute.use('/adverManage',verifyAdminToken,adverManageRoute)
+// adminRoute.use('/adverManage',verifyAdminToken,adverManageRoute)
 adminRoute.use('/adverManage',adverManageRoute)
 adminRoute.use('/blockUser',blockUserRoute)
 
