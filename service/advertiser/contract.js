@@ -9,7 +9,7 @@ createPost : (_id,data)=>{
             let newContractModel = new contractModel(data);
             let saveData = newContractModel.save();
             if (saveData) {
-                res({status:200,data:"POST Create Successfully..."})
+                res({status:200,data:(await saveData)._id})
             } else {
                 rej({status:404,data:"POST not Created ..."})
             }

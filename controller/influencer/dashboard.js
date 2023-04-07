@@ -6,20 +6,12 @@ const { response } = require('../../middleware/response')
 
   exports.getAll = async (req, res) => {
     try {
-      if (!req.query.page || !req.query.limit) {
-        return response("pagination is require for pagination..!!", {}, 404, res);
-      } else {
-        let resp = await dashboardService.getAll(
-          req.query.page,
-          req.query.limit,
-          req.query.str
-        );
+        let resp = await dashboardService.getAll();
         if (resp) {
-          return response('data fetched',resp.data,200, res)
+          return response('Post fetched',resp.data,200, res)
         } else {
           return response("something went wrong!!",{},500, res);
         }
-      }
     } catch (err) {
       return response(err.message,err?.error,err.status,res);
     }
