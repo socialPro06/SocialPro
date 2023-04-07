@@ -5,12 +5,26 @@ module.exports = {
     getAll : ()=>{
         return new Promise (async (res,rej)=>{
             try {
+                
                 let getData = await contractModel.aggregate([
                     { $facet : {
                         totalCount : [{ $group : { _id: null,count : { $sum:1 }} }],
                         result : [
                             { $project : { __v:0 } },
                             { $sort: { createdAt : -1 } },
+                            {
+                              $lookup : {
+                                from: "advertisers",
+                                localField: "publisherId", 
+                                foreignField: "_id",
+                                pipeline:[
+                                    {
+                                        $project: { __v :0, password:0, confirmPassword:0}
+                                    }
+                                ],
+                                as: "advertiserData"
+                              }
+                            }
                         ],  
                     }}
                 ]);
@@ -51,7 +65,21 @@ module.exports = {
                  }
                  let getData = await contractModel.aggregate( [ 
                     { $match: qry },
-                    { $project: { __v:0 } }
+                    { $project: { __v:0 } },
+                    { $sort: {createdAt: -1 } },
+                    {
+                        $lookup : {
+                          from: "advertisers",
+                          localField: "publisherId", 
+                          foreignField: "_id",
+                          pipeline:[
+                              {
+                                  $project: { __v :0, password:0, confirmPassword:0}
+                              }
+                          ],
+                          as: "advertiserData"
+                        }
+                      }
                 ] );
                  if (getData) {
                     res( { status:200, data: { result:getData } } );
