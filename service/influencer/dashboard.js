@@ -2,23 +2,18 @@ const contractModel = require("../../model/contract")
 const advertiserModel = require('../../model/advertiser')
 
 module.exports = {
-    getAll : (page,limit,str)=>{
+    getAll : ()=>{
         return new Promise (async (res,rej)=>{
             try {
-                page = parseInt(page);
-                limit = parseInt(limit);
-
                 let getData = await contractModel.aggregate([
                     { $facet : {
                         totalCount : [{ $group : { _id: null,count : { $sum:1 }} }],
                         result : [
                             { $project : { __v:0 } },
                             { $sort: { createdAt : -1 } },
-                            { $skip: (page - 1) * limit },
-                            { $limit: limit },
                         ],  
                     }}
-                ])
+                ]);
                 getData = getData[0];
                 if (getData.result.length > 0) {
                     res({status:200,data:{totalCount: getData.totalCount[0].count,result:getData.result }})
