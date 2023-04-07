@@ -122,9 +122,16 @@ byId:(influ_id,page,limit)=>{
                         },
                         { $sort: { createdAt: -1 } },
                         { $skip: (page - 1)*limit },
-                        { $limit: limit }
+                        { $limit: limit },
+                        { $lookup : {
+                            from:"adsdetails",
+                            foreignField :"_id",
+                            localField:"adsId",
+                            as:"postDetail"
+                        }}
                         ]
-                    }
+                    },
+
                 }
             ]);
             getData = getData[0];
