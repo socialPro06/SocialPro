@@ -115,11 +115,7 @@ byId:(influ_id,page,limit)=>{
                             }
                         ],
                         result: [
-                        {
-                            $project: {
-                                __v: 0,
-                            }
-                        },
+                        { $project: { __v : 0, } },
                         { $sort: { createdAt: -1 } },
                         { $skip: (page - 1)*limit },
                         { $limit: limit },
@@ -128,12 +124,15 @@ byId:(influ_id,page,limit)=>{
                             foreignField :"_id",
                             localField:"adsId",
                             as:"postDetail"
-                        }}
+                        } },
+                        {
+                            $unwind : '$postDetail'
+                        }
                         ]
                     },
 
                 }
-            ]);
+            ])
             getData = getData[0];
             if (getData.result.length > 0) {
                 res({

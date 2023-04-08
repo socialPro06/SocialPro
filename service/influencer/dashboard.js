@@ -24,6 +24,9 @@ module.exports = {
                                 ],
                                 as: "advertiserData"
                               }
+                            },
+                            {
+                                $unwind:"$advertiserData"
                             }
                         ],  
                     }}
@@ -79,6 +82,9 @@ module.exports = {
                           ],
                           as: "advertiserData"
                         }
+                      },
+                      {
+                        $unwind:"$advertiserData"
                       }
                 ] );
                  if (getData) {
