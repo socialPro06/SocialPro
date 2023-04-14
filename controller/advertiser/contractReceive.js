@@ -1,23 +1,44 @@
 const contractReceiveService = require('../../service/advertiser/contractReceive')
 const {response} = require('../../middleware/response')
 
-exports.byId = async (req,res)=>{
+exports.pendingRequest = async (req,res)=>{
     try {
         if (!req.query.page || !req.query.limit) {
             return response("pagination is require for paging..!!", {}, 404, res);
         } else {
-              let resp = await contractReceiveService.byId(
-                  req.params._id,
-                  req.query.page,
-                  req.query.limit
+              let resp = await contractReceiveService.pendingRequest(
+                req.params.adver_id,
+                req.query.page,
+                req.query.limit
+                );
+        if (resp) {
+            return response("Post details...",resp.data,200,res);
+        } else {
+            return response("Not Found...",{},400,res);
+        }
+    } 
+}   catch (err) {
+        return response(err.message,err?.error,err.status,res);
+    }
+}
+
+exports.pendingInflu = async (req,res)=>{
+    try {
+        if (!req.query.page || !req.query.limit) {
+            return response("pagination is require for paging..!!", {}, 404, res);
+        } else {
+              let resp = await contractReceiveService.pendingInflu(
+                req.params.ads_Id,
+                req.query.page,
+                req.query.limit
                 );
         if (resp) {
             return response("Bid details...",resp.data,200,res);
         } else {
             return response("Not Found...",{},400,res);
         }
-    }
-    } catch (err) {
+    } 
+}   catch (err) {
         return response(err.message,err?.error,err.status,res);
     }
 }

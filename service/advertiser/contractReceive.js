@@ -7,37 +7,35 @@ const { mail } = require('../../helper/mail')
 const { default: mongoose } = require('mongoose')
 
 module.exports = {
-byId:(contractId,page,limit)=>{
+pendingRequest:(adver_id,page,limit)=>{
     return new Promise (async (res,rej)=>{
         try {
             page = parseInt(page);
             limit = parseInt(limit);
-            let getData = await bidModel.aggregate([
+            let getData = await contractReceiveModel.aggregate([
                 {
                     $match: {
-                        adsId: mongoose.Types.ObjectId(contractId),
-                        status:"request"
+                        publisherId: mongoose.Types.ObjectId(adver_id),
+                        status:'request'
                     }
                 },
                 {
                     $facet: {
-                        totalCount: [
-                            {
-                                $group: {
-                                    _id:null,
-                                    count: { $sum: 1}
-                                }
-                            }
-                        ],
+                        totalCount: [ { $group: { _id : null,count: { $sum: 1} } } ],
                         result: [
-                        {
-                            $project: {
-                                __v: 0,
-                            }
-                        },
+                        {   $project: { __v: 0 } },
                         { $sort: { createdAt: -1 } },
                         { $skip: (page - 1)*limit },
-                        { $limit: limit }
+                        { $limit: limit },
+                        { $lookup : {
+                            from:"adsdetails",
+                            foreignField :"_id",
+                            localField:"adsId",
+                            as:"postDetail"
+                        } },
+                        {
+                            $unwind : '$postDetail'
+                        }
                         ]
                     }
                 }
@@ -63,6 +61,59 @@ byId:(contractId,page,limit)=>{
     })
 },
 
+pendingInflu:(ads_id,page,limit)=>{
+    return new Promise (async (res,rej)=>{
+        try {
+            page = parseInt(page);
+            limit = parseInt(limit);
+            let getData = await contractReceiveModel.aggregate([
+                {
+                    $match: {
+                        adsId: mongoose.Types.ObjectId(ads_id),
+                        status:'request'
+                    }
+                },
+                {
+                    $facet: {
+                        totalCount: [ { $group: { _id : null,count: { $sum: 1} } } ],
+                        result: [
+                        {   $project: { __v: 0 } },
+                        { $sort: { createdAt: -1 } },
+                        { $skip: (page - 1)*limit },
+                        { $limit: limit },
+                        // { $lookup : {
+                        //     from:"biddetails",
+                        //     foreignField :"adsId",
+                        //     localField:"adsId",
+                        //     as:"bidDetail"
+                        // } },
+                        // {
+                        //     $unwind : '$postDetail'
+                        // }
+                        ]
+                    }
+                }
+            ]);
+            getData = getData[0];
+            if (getData.result.length > 0) {
+                res({
+                    status:200,
+                    data: {
+                       totalCount: getData.totalCount[0].count,
+                       result: getData.result
+                    }
+                })
+            } else {
+                rej({status:404,message:"Data not Found..."})
+            }
+        } catch (err) {
+            rej( { status:err?.status || 500,
+                 error:err,
+                 message: err?.message || "Something went Wrong..."
+                } )
+        }
+    })
+},
 
 approveRequest:(ads_Id,influ_Id)=>{
 return new Promise(async (res,rej)=>{

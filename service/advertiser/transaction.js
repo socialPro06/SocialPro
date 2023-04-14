@@ -66,6 +66,7 @@ return new Promise(async (res,rej)=>{
 })
 },
 
+
 fetchPayment:(ads_Id)=>{
   return new Promise(async (res,rej)=>{
     try {

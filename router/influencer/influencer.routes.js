@@ -8,6 +8,7 @@ const supportRoute = require('./support')
 const dashboardRoute = require('./dashboard')
 const profileRoute = require('./profile')
 const bidRoute = require('./bid')
+const walletRoute = require('./wallet')
 
 influencerRoute.get("/",(req,res)=>{
     res.send({status:200,message:"Influencer Route is working !!"})
@@ -19,5 +20,6 @@ influencerRoute.use('/support',supportRoute)
 influencerRoute.use('/dashboard',dashboardRoute)
 influencerRoute.use('/profile',profileRoute)
 influencerRoute.use('/bid',bidRoute)
+influencerRoute.use('/wallet',walletRoute)
 
 module.exports = influencerRoute
