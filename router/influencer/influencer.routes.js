@@ -4,7 +4,6 @@ const influencerRoute = Router()
 const {verifyInfluencerToken} = require('../../middleware/verifyToken')
 
 const authRoute = require('./auth')
-const supportRoute = require('./support')
 const dashboardRoute = require('./dashboard')
 const profileRoute = require('./profile')
 const bidRoute = require('./bid')
@@ -16,7 +15,6 @@ influencerRoute.get("/",(req,res)=>{
 
 
 influencerRoute.use('/auth',authRoute)
-influencerRoute.use('/support',supportRoute)
 influencerRoute.use('/dashboard',dashboardRoute)
 influencerRoute.use('/profile',profileRoute)
 influencerRoute.use('/bid',bidRoute)

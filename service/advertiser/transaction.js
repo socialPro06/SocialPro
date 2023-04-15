@@ -1,9 +1,10 @@
 const Razorpay =  require('razorpay');
 const transactionModel = require('../../model/transaction');
 const walletModel = require('../../model/wallet');
-const contractReceivedModel = require('../../model/contractReceive');
+const contractReceiveModel = require('../../model/contractReceive');
+const contractModel = require('../../model/contract')
+const bidModel= require('../../model/bid')
 const path = require('path')
-const crypto = require('crypto');
 const { default: mongoose } = require('mongoose');
 require("dotenv").config({path: path.join(__dirname,"../../config/.env")})
 
@@ -39,30 +40,57 @@ createOrder:(amount)=>{
 
 paymentVerify:(ads_Id,influ_id,contract_id,data1)=>{
 return new Promise(async (res,rej)=>{
-  try {
+  try {  
+let data = {};
+data["adsId"] = ads_Id;
+data["influencerId"] = influ_id;
+data["amount"] = data1.amount;
+data["paymentId"] = data1.razorpay_payment_id;
+data["orderId"] = data1.razorpay_order_id;
+data["paymentSignature"] = data1.razorpay_signature;
+data["contractId"] = contract_id;
 
-    let data = {};
-    data["adsId"] = ads_Id;
-    data["influencerId"] = influ_id;
-    data["amount"] = data1.amount;
-    data["paymentId"] = data1.razorpay_payment_id;
-    data["orderId"] = data1.razorpay_order_id;
-    data["paymentSignature"] = data1.razorpay_signature;
-    data["contractId"] = contract_id;
-    let newTransactionModel = new transactionModel(data);
-    let saveData = newTransactionModel.save();
 
-    if (saveData) {
-        res({status:200,data:"payment is successful"});
+let newTransactionModel = new transactionModel(data);
+let saveData = newTransactionModel.save();
+
+
+if (saveData) {
+  // let getData = await contractModel.findById(ads_Id)
+  // if (getData) {
+    let updateData1 = await contractReceiveModel.findOneAndUpdate({adsId:contract_id,influecerId:influ_id},{status:"approve"},{new:true});
+    let updateData2 = await bidModel.findOneAndUpdate({adsId:contract_id,influecerId:influ_id},{status:"pending"},{new:true});
+    if (updateData1 && updateData2) {
+        // let getData1 = await influencerModel.findOne({_id:influ_id})
+        // if (getData1) {
+        //     // console.log("data...",getData1);
+        //     await mail(getData1.emailId,`Your Contract Aprroved `,getData.title).then(()=>{
+        //         res({ status: 200, data: "Mail Has too be sent..." });
+        //     })
+        // }
+        res({status:200,data:"data updated"})
     } else {
-        rej({status:404,message:"Transaction Data not Added..."})
+        rej({status:404,message:"Contract Not Approve.."});
     }
+// } else {
+//     rej({status:404,message:"Contract Not found.."});
+// }
 
-    let newWalletModel = new walletModel(data);
-    let saveData2 = newWalletModel.save();
-  } catch (err) {
-    rej({status:500,error:err,message:"Something went Wrong...!!"});
+      res({status:200,data:"payment is successful"});
+  } else {
+      rej({status:404,message:"Transaction Data not Added..."})
   }
+
+
+  let newWalletModel = new walletModel(data);
+  let saveData2 = newWalletModel.save();
+
+
+} catch (err) {
+  rej( { status:err?.status || 500,
+    error:err,
+    message: err?.message || "Something went Wrong..."
+   } )}
 })
 },
 

@@ -31,7 +31,7 @@ exports.cancelBid = async(req,res)=>{
     try {
         let resp = await bidService.cancelBid(req.query.ads_id,req.query.influ_id);
         if (resp) {
-            return response("Cancel Success..",resp.data,200,res)
+            return response("Cancel Success..",{},200,res)
         } else {
             return response("Cancel Fails...",{},500,res)
         }
@@ -40,12 +40,33 @@ exports.cancelBid = async(req,res)=>{
     }
 }
 
-exports.byId = async (req,res)=>{
+exports.requesedBid = async (req,res)=>{
     try {
         if (!req.query.page || !req.query.limit) {
             return response("pagination is require for paging..!!", {}, 404, res);
         } else {
-              let resp = await bidService.byId(
+              let resp = await bidService.requesedBid(
+                  req.params.influ_id,
+                  req.query.page,
+                  req.query.limit
+                );
+        if (resp) {
+            return response("Bid details...",resp.data,200,res);
+        } else {
+            return response("Not Found...",{},400,res);
+        }
+    }
+    } catch (err) {
+        return response(err.message,err?.error,err.status,res);
+    }
+}
+
+exports.pendingBid = async (req,res)=>{
+    try {
+        if (!req.query.page || !req.query.limit) {
+            return response("pagination is require for paging..!!", {}, 404, res);
+        } else {
+              let resp = await bidService.pendingBid(
                   req.params.influ_id,
                   req.query.page,
                   req.query.limit

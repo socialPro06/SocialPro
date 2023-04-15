@@ -13,6 +13,11 @@ const bidSchema = new Schema({
         type:Number,
         require:true
     },
+    description: { 
+        type: String, 
+        required: true,
+        trim:true 
+    },
     status:{
         type:String,
         enum:['request',"pending",'cancle'],

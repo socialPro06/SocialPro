@@ -7,6 +7,7 @@ const advertiserRoute = require('./advertiser/advertiser.routes')
 const otpRoute = require('./otp')
 const commonRoute = require('./common')
 const imageRoute = require('./image')
+const supportRoute = require('./support')
 
 
 v1.get("/",(req,res)=>{
@@ -19,6 +20,7 @@ v1.use("/advertiser",advertiserRoute)
 v1.use("/otp",otpRoute)
 v1.use("/image",imageRoute)
 v1.use("/common",commonRoute)
+v1.use("/support",supportRoute)
 
 
 module.exports = v1;

@@ -66,33 +66,32 @@ updateBid:(ads_id,influ_id,data)=>{
 cancelBid:(ads_id,influ_id)=>{
     return new Promise(async(rej,res)=>{
         try {
-            let count = getData.influencerCounte - 1;
-            let newcontractModel =await findByIdAndUpdate(ads_id,{influencerCounte: count},{new:true})
-            let cancelData = await bidModel.findByIdAndDelete(
+            let getData = await contractModel.findById(ads_id);
+
+            let cancelData = await bidModel.findOneAndDelete(
                 { adsId:ads_id, influencerId:influ_id },
                 { new:true }
                 )
-                if (cancelData) {
-                res({status:200,data:"Bid Cancel...."})
-            } else {
-                rej({status:200,data:"Invalid Id"})
-            }
-            let cancelData2 = await contractReceiveModel.findByIdAndDelete(
+            let cancelData2 = await contractReceiveModel.findOneAndDelete(
                 { adsId:ads_id, influencerId:influ_id },
-                { new:true }
-                )
-                if (cancelData2) {
-                res({status:200,data:"Contract Cancel...."})
+                { new:true })
+            
+            if (cancelData && cancelData2) {
+                let count = getData.influencerCounte - 1;
+                let updatecontractModel =await contractModel.findByIdAndUpdate(ads_id,{influencerCounte: count},{new:true})
+                if (updatecontractModel) {
+                    res({status:200,data:"Contract Cancel...."})
+                    }
             } else {
-                rej({status:200,data:"Invalid Id"})
-            }
+                rej({status:200,message:"Contract not found"})
+            }  
         } catch (err) {
             rej({ status: err?.status || 500, error: err, message: err?.message || "Something went wrong" })
         }
     })
 },
 
-byId:(influ_id,page,limit)=>{
+requesedBid:(influ_id,page,limit)=>{
     return new Promise (async (res,rej)=>{
         try {
             page = parseInt(page);
@@ -102,6 +101,68 @@ byId:(influ_id,page,limit)=>{
                     $match: {
                         influencerId: mongoose.Types.ObjectId(influ_id),
                         status:"request"
+                    }
+                },
+                {
+                    $facet: {
+                        totalCount: [
+                            {
+                                $group: {
+                                    _id:null,
+                                    count: { $sum: 1}
+                                }
+                            }
+                        ],
+                        result: [
+                        { $project: { __v : 0, } },
+                        { $sort: { createdAt: -1 } },
+                        { $skip: (page - 1)*limit },
+                        { $limit: limit },
+                        { $lookup : {
+                            from:"adsdetails",
+                            foreignField :"_id",
+                            localField:"adsId",
+                            as:"postDetail"
+                        } },
+                        {
+                            $unwind : '$postDetail'
+                        }
+                        ]
+                    },
+
+                }
+            ])
+            getData = getData[0];
+            if (getData.result.length > 0) {
+                res({
+                    status:200,
+                    data: {
+                       totalCount: getData.totalCount[0].count,
+                       result: getData.result
+                    }
+                })
+            } else {
+                rej({status:404,message:"Data not Found..."})
+            }
+        } catch (err) {
+            rej( { status:err?.status || 500,
+                 error:err,
+                 message: err?.message || "Something went Wrong..."
+                } )
+        }
+    })
+},
+
+pendingBid:(influ_id,page,limit)=>{
+    return new Promise (async (res,rej)=>{
+        try {
+            page = parseInt(page);
+            limit = parseInt(limit);
+            let getData = await bidModel.aggregate([
+                {
+                    $match: {
+                        influencerId: mongoose.Types.ObjectId(influ_id),
+                        status:"pending"
                     }
                 },
                 {

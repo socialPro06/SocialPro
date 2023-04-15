@@ -23,7 +23,7 @@ sendOtp: (emailId, mobileNo)=>{
                     from: "socialpro06@gmail.com",
                     to: `${emailId}`,
                     subject:"Social Pro verification !!",
-                    text: `This is your otp ${otp} for `
+                    text: `This is your otp ${otp} for Registation Proccess.`
                 }
                 trasporter.sendMail(mailOption, function (err) {
                     if (err) {

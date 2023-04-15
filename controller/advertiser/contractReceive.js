@@ -43,21 +43,21 @@ exports.pendingInflu = async (req,res)=>{
     }
 }
 
-exports.approveRequest = async (req,res)=>{
-    try {
-        let resp = await contractReceiveService.approveRequest(
-            req.query.ads_Id,
-            req.query.influ_Id
-        );
-        if (resp) {
-            return response("Contract Approve...",resp.data,200,res);
-        } else {
-            return response("Contract Not Approve",{},400,res);
-        }
-    } catch (err) {
-        return response(err.message,err?.error,err.status,res);
-    }
-}
+// exports.approveRequest = async (req,res)=>{
+//     try {
+//         let resp = await contractReceiveService.approveRequest(
+//             req.query.ads_Id,
+//             req.query.influ_Id
+//         );
+//         if (resp) {
+//             return response("Contract Approve...",resp.data,200,res);
+//         } else {
+//             return response("Contract Not Approve",{},400,res);
+//         }
+//     } catch (err) {
+//         return response(err.message,err?.error,err.status,res);
+//     }
+// }
 
 exports.cancleRequest = async (req,res)=>{
     try {
