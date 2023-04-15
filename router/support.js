@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const supportController = require('../../controller/influencer/support')
+const supportController = require('../controller/support')
 
 const supportRoute = Router()
 

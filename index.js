@@ -15,10 +15,7 @@ app.use(cors())
 app.get('/', (req, res) => {
     res.status(200).json("Initial root for Social pro");
 })
-
-
 app.use("/v1", v1);
-
 mongoose.connect(process.env.DATABSE_CONNECTION, async (err, result) => {
     if (err) {
         console.log(err)

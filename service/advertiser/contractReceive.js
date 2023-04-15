@@ -7,37 +7,35 @@ const { mail } = require('../../helper/mail')
 const { default: mongoose } = require('mongoose')
 
 module.exports = {
-byId:(contractId,page,limit)=>{
+pendingRequest:(adver_id,page,limit)=>{
     return new Promise (async (res,rej)=>{
         try {
             page = parseInt(page);
             limit = parseInt(limit);
-            let getData = await bidModel.aggregate([
+            let getData = await contractReceiveModel.aggregate([
                 {
                     $match: {
-                        adsId: mongoose.Types.ObjectId(contractId),
-                        status:"request"
+                        publisherId: mongoose.Types.ObjectId(adver_id),
+                        status:'request'
                     }
                 },
                 {
                     $facet: {
-                        totalCount: [
-                            {
-                                $group: {
-                                    _id:null,
-                                    count: { $sum: 1}
-                                }
-                            }
-                        ],
+                        totalCount: [ { $group: { _id : null,count: { $sum: 1} } } ],
                         result: [
-                        {
-                            $project: {
-                                __v: 0,
-                            }
-                        },
+                        {   $project: { __v: 0 } },
                         { $sort: { createdAt: -1 } },
                         { $skip: (page - 1)*limit },
-                        { $limit: limit }
+                        { $limit: limit },
+                        { $lookup : {
+                            from:"adsdetails",
+                            foreignField :"_id",
+                            localField:"adsId",
+                            as:"postDetail"
+                        } },
+                        {
+                            $unwind : '$postDetail'
+                        }
                         ]
                     }
                 }
@@ -63,37 +61,90 @@ byId:(contractId,page,limit)=>{
     })
 },
 
-
-approveRequest:(ads_Id,influ_Id)=>{
-return new Promise(async (res,rej)=>{
-try {
-    let getData = await contractModel.findById(ads_Id)
-    if (getData) {
-        let updateData1 = await contractReceiveModel.findOneAndUpdate({adsId:ads_Id,influecerId:influ_Id},{status:"approve"},{new:true});
-        let updateData2 = await bidModel.findOneAndUpdate({adsId:ads_Id,influecerId:influ_Id},{status:"pending"},{new:true});
-        if (updateData1 && updateData2) {
-            let getData1 = await influencerModel.findOne({_id:influ_Id})
-            if (getData1) {
-                // console.log("data...",getData1);
-                await mail(getData1.emailId,`Your Contract Aprroved `,getData.title).then(()=>{
-                    res({ status: 200, data: "Mail Has too be sent..." });
+pendingInflu:(ads_id,page,limit)=>{
+    return new Promise (async (res,rej)=>{
+        try {
+            page = parseInt(page);
+            limit = parseInt(limit);
+            let getData = await contractReceiveModel.aggregate([
+                {
+                    $match: {
+                        adsId: mongoose.Types.ObjectId(ads_id),
+                        status:'request'
+                    }
+                },
+                {
+                    $facet: {
+                        totalCount: [ { $group: { _id : null,count: { $sum: 1} } } ],
+                        result: [
+                        {   $project: { __v: 0 } },
+                        { $sort: { createdAt: -1 } },
+                        { $skip: (page - 1)*limit },
+                        { $limit: limit },
+                        { $lookup : {
+                            from:"influencers",
+                            foreignField :"_id",
+                            localField:"influencerId",
+                            as:"influencersData"
+                        } },
+                        {
+                            $unwind : '$influencersData'
+                        }
+                        ]
+                    }
+                }
+            ]);
+            getData = getData[0];
+            if (getData.result.length > 0) {
+                res({
+                    status:200,
+                    data: {
+                       totalCount: getData.totalCount[0].count,
+                       result: getData.result
+                    }
                 })
+            } else {
+                rej({status:404,message:"Data not Found..."})
             }
-            res({status:200,data:"data updated"})
-        } else {
-            rej({status:404,message:"Contract Not Approve.."});
+        } catch (err) {
+            rej( { status:err?.status || 500,
+                 error:err,
+                 message: err?.message || "Something went Wrong..."
+                } )
         }
-    } else {
-        rej({status:404,message:"Contract Not found.."});
-    }
-} catch (err) {
-    rej( { status:err?.status || 500 ,
-        error: err, 
-        message: err?.message || "Something Went Wrong ..."
     })
-}
-})
 },
+
+// approveRequest:(ads_Id,influ_Id)=>{
+// return new Promise(async (res,rej)=>{
+// try {
+//     let getData = await contractModel.findById(ads_Id)
+//     if (getData) {
+//         let updateData1 = await contractReceiveModel.findOneAndUpdate({adsId:ads_Id,influecerId:influ_Id},{status:"approve"},{new:true});
+//         let updateData2 = await bidModel.findOneAndUpdate({adsId:ads_Id,influecerId:influ_Id},{status:"pending"},{new:true});
+//         if (updateData1 && updateData2) {
+//             let getData1 = await influencerModel.findOne({_id:influ_Id})
+//             if (getData1) {
+//                 // console.log("data...",getData1);
+//                 await mail(getData1.emailId,`Your Contract Aprroved `,getData.title).then(()=>{
+//                     res({ status: 200, data: "Mail Has too be sent..." });
+//                 })
+//             }
+//             res({status:200,data:"data updated"})
+//         } else {
+//             rej({status:404,message:"Contract Not Approve.."});
+//         }
+//     } else {
+//         rej({status:404,message:"Contract Not found.."});
+//     }
+// } catch (err) {
+//     rej( { status:err?.status || 500 ,
+//         error: err, 
+//         message: err?.message || "Something Went Wrong ..."
+//     })
+// }
+// })
+// },
 
 cancleRequest:(ads_Id,influ_Id)=>{
     return new Promise(async (res,rej)=>{

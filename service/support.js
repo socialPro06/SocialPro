@@ -1,5 +1,6 @@
 const { Promise } = require('mongoose')
-const supportModel = require('../../model/support')
+const { mail } = require('../helper/mail')
+const supportModel = require('../model/support')
 
 module.exports = {
     addSupport : (data)=>{
@@ -8,6 +9,7 @@ module.exports = {
                 let newSupportModel = new supportModel(data)
                 let saveData = newSupportModel.save()
                 if (saveData) {
+                    await mail(data.emailId,"Support Response !",`Thank you ${data.name} for your mail`)
                     res({status:200,data:"support Successfully!!"})
                 } else {
                     rej({status:404,message:"Something went wrong in support !! "})

@@ -2,7 +2,7 @@ const influencerModel = require('../../model/influencer')
 const mongoose = require('mongoose')
 
 module.exports = {
-    update: async(_id,data)=>{
+    update: (_id,data)=>{
         return new Promise (async (res,rej)=>{
             try {
                 let getData = await influencerModel.findByIdAndUpdate(_id,data,{ new:true });

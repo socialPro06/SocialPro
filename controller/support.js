@@ -1,5 +1,5 @@
-const supportService = require('../../service/influencer/support')
-const { response } = require('../../middleware/response')
+const supportService = require('../service/support')
+const { response } = require('../middleware/response')
 
 exports.addSupport = async(req,res)=>{
     try {
