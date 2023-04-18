@@ -9,7 +9,7 @@ getAll:()=>{
                 {
                     $facet:{
                         totalCount:[
-                            { $group : { _id:null }, count: { $sum : 1 } }
+                            { $group : { _id:null , count: { $sum : 1 } } }
                         ],
                         result:[
                             { $project : { _v : 0 } },

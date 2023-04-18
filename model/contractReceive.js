@@ -13,11 +13,16 @@ const adsDetailSchema = new Schema({
     influencerId: { 
         type: Schema.Types.ObjectId,  
     },
+    instaPostUrl :{
+        type : String,
+        default:null
+    },  
     status:{
         type:String,
         enum:[
             "request",
-            "approve", 
+            "approve",
+            "hold", 
             "complete"
         ],
         default:'request'

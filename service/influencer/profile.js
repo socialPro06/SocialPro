@@ -17,10 +17,13 @@ getProfile:(userId)=>{
         })
     },
     
-update: async (_id, data) => {
+update: (_id, data) => {
     return new Promise(async (res, rej) => {
       try {
-        let getData = await influencerModel.findByIdAndUpdate(_id, data, { new: true });
+        if (data.platform) {
+          let getData1 = await influencerModel.findByIdAndUpdate(_id,{$push : {platform : data.platform } }, { new: true })
+        } 
+        let getData = await influencerModel.findByIdAndUpdate(_id, data , { new: true });
             if (getData) {
               res({ status: 200, data: "Profile update" });
             } else {

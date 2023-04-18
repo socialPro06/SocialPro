@@ -84,7 +84,6 @@ getAllPost:(publisher_Id)=>{
             ])
             getData = getData[0]
             if (getData.totalCount.length > 0) {
-                // res({status:200,data:getData} )
                 res({
                     status:200,
                     data: { 

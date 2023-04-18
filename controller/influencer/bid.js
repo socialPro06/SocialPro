@@ -40,12 +40,12 @@ exports.cancelBid = async(req,res)=>{
     }
 }
 
-exports.requesedBid = async (req,res)=>{
+exports.requestedBid = async (req,res)=>{
     try {
         if (!req.query.page || !req.query.limit) {
             return response("pagination is require for paging..!!", {}, 404, res);
         } else {
-              let resp = await bidService.requesedBid(
+              let resp = await bidService.requestedBid(
                   req.params.influ_id,
                   req.query.page,
                   req.query.limit

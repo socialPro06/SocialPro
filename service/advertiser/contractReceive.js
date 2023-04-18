@@ -31,11 +31,34 @@ pendingRequest:(adver_id,page,limit)=>{
                             from:"adsdetails",
                             foreignField :"_id",
                             localField:"adsId",
-                            as:"postDetail"
+                            as:"postDetails"
                         } },
                         {
-                            $unwind : '$postDetail'
-                        }
+                            $unwind : '$postDetails'
+                        },
+                        { $lookup : {
+                            from:"biddetails",
+                            let:{
+                                "cr_adsId":"$adsId",
+                                "cr_influId":"$influencerId"
+                            },
+                            pipeline:[
+                                {"$match":
+                                  {"$expr":
+                                    {"$and": [
+                                        {"$eq": ["$adsId",  "$$cr_adsId"]},
+                                        {"$eq": ["$influencerId",  "$$cr_influId"]},            
+                              ]},
+                            },
+                              },
+                            ],
+                            // foreignField :"_id",
+                            // localField:"adsId",
+                            as:"bidDetails"
+                        } },
+                        {
+                            $unwind : '$bidDetails'
+                        },
                         ]
                     }
                 }
@@ -85,6 +108,65 @@ pendingInflu:(ads_id,page,limit)=>{
                             from:"influencers",
                             foreignField :"_id",
                             localField:"influencerId",
+                            as:"influencersData"
+                        } },
+                        {
+                            $unwind : '$influencersData'
+                        }
+                        ]
+                    }
+                }
+            ]);
+            getData = getData[0];
+            if (getData.result.length > 0) {
+                res({
+                    status:200,
+                    data: {
+                       totalCount: getData.totalCount[0].count,
+                       result: getData.result
+                    }
+                })
+            } else {
+                rej({status:404,message:"Data not Found..."})
+            }
+        } catch (err) {
+            rej( { status:err?.status || 500,
+                 error:err,
+                 message: err?.message || "Something went Wrong..."
+                } )
+        }
+    })
+},
+
+approveInflu:(ads_Id,page,limit)=>{
+    return new Promise (async (res,rej)=>{
+        try {
+            page = parseInt(page);
+            limit = parseInt(limit);
+            let getData = await contractReceiveModel.aggregate([
+                {
+                    $match: {
+                        adsId: mongoose.Types.ObjectId(ads_Id),
+                        status:'approve'
+                    }
+                },
+                {
+                    $facet: {
+                        totalCount: [ { $group: { _id : null,count: { $sum: 1} } } ],
+                        result: [
+                        {   $project: { __v: 0 } },
+                        { $sort: { createdAt: -1 } },
+                        { $skip: (page - 1)*limit },
+                        { $limit: limit },
+                        { $lookup : {
+                            from:"influencers",
+                            foreignField :"_id",
+                            localField:"influencerId",
+                            pipeline:[
+                                {
+                                    $project: { __v :0, password:0, confirmPassword:0}
+                                }
+                            ],
                             as:"influencersData"
                         } },
                         {
@@ -165,14 +247,6 @@ cancleRequest:(ads_Id,influ_Id)=>{
                 let updateData3 =await contractModel.findByIdAndUpdate(ads_Id,{influencerCounte: count},{new:true})
                 if(!updateData3){
                     rej({status:404,message:"Contract Not Update"})
-                }
-                
-                let getData1 = await influencerModel.findOne({_id:influ_Id})
-                if (getData1) {
-                // console.log("data...",getData1);
-                await mail(getData1.emailId,`Your Contract has been Cancel `,getData.title).then(()=>{
-                    res({ status: 200, data: "Mail Has too be sent..." });
-                })
                 }
                     res({status:200,data:"Conract Cancle..."})
             } else {

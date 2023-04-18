@@ -12,7 +12,7 @@ exports.pendingRequest = async (req,res)=>{
                 req.query.limit
                 );
         if (resp) {
-            return response("Post details...",resp.data,200,res);
+            return response("Post request details...",resp.data,200,res);
         } else {
             return response("Not Found...",{},400,res);
         }
@@ -22,6 +22,26 @@ exports.pendingRequest = async (req,res)=>{
     }
 }
 
+exports.approveInflu = async (req,res)=>{
+    try {
+        if (!req.query.page || !req.query.limit) {
+            return response("pagination is require for paging..!!", {}, 404, res);
+        } else {
+              let resp = await contractReceiveService.approveInflu(
+                req.params.ads_Id,
+                req.query.page,
+                req.query.limit
+                );
+        if (resp) {
+            return response("approve request details...",resp.data,200,res);
+        } else {
+            return response("Not Found...",{},400,res);
+        }
+    } 
+}   catch (err) {
+        return response(err.message,err?.error,err.status,res);
+    }
+}
 exports.pendingInflu = async (req,res)=>{
     try {
         if (!req.query.page || !req.query.limit) {

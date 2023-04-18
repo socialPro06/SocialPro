@@ -9,8 +9,12 @@ const walletSchema = new Schema({
     amount: { 
         type: Number, 
         required: true 
+    },    
+    adsId:{ 
+        type: Schema.Types.ObjectId, 
+        // required: true, 
     },
-    adsId: { 
+    publisherId: { 
         type: Schema.Types.ObjectId, 
         required: true, 
     },
