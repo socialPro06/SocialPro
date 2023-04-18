@@ -8,7 +8,7 @@ contractReceiveRoute.get('/',(req,res)=>{
 })
 contractReceiveRoute.get('/pendingRequest/:adver_id',contractReceiveController.pendingRequest)
 contractReceiveRoute.get('/pendingInflu/:ads_Id',contractReceiveController.pendingInflu)
-// contractReceiveRoute.put('/approveRequest',contractReceiveController.approveRequest)
+contractReceiveRoute.get('/approveInflu/:ads_Id',contractReceiveController.approveInflu)
 contractReceiveRoute.put('/cancelRequest',contractReceiveController.cancleRequest)
 
 module.exports = contractReceiveRoute;

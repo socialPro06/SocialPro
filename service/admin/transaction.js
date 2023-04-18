@@ -2,6 +2,7 @@ const Razorpay =  require('razorpay');
 const transactionModel = require('../../model/transaction');
 const walletModel = require('../../model/wallet');
 const contractReceiveModel = require('../../model/contractReceive');
+const adminTransactonModel = require('../../model/adminTransaction')
 const contractModel = require('../../model/contract')
 const bidModel= require('../../model/bid')
 const path = require('path')
@@ -15,7 +16,7 @@ const razorpayInstance = new Razorpay({
 
 module.exports = {
 
-getAll:(ads_id,page,limit)=>{
+getAll:(page,limit)=>{
 return new Promise(async(res,rej)=>{
 try {
     page = parseInt(page);
@@ -30,7 +31,7 @@ try {
                     }
                 } ],
                 result : [
-                { $project: { __v: 0  } },
+                { $project: { __v : 0 } },
                 { $sort: {  createdAt : -1} },
                 { $skip: (page - 1)*limit },
                 { $limit: limit },
@@ -38,9 +39,8 @@ try {
             }
         }
     ])
-
     getData = getData[0];
-    if (getData.totalCount.lenght > 0) {
+    if (getData.totalCount[0].count > 0) {
         res({
             status:200,
             data:{ 
@@ -83,39 +83,42 @@ createOrder:(amount)=>{
     })
 },
 
-paymentVerify:(ads_Id,influ_id,data1)=>{
+paymentVerify:(ads_Id,influ_id,contract_id,data1)=>{
     return new Promise(async (res,rej)=>{
       try {  
-    let data = {};
-    data["adsId"] = ads_Id;
-    data["influencerId"] = influ_id;
-    data["amount"] = data1.amount;
-    data["paymentId"] = data1.razorpay_payment_id;
-    data["orderId"] = data1.razorpay_order_id;
-    data["paymentSignature"] = data1.razorpay_signature;    
-    
-    let newTransactionModel = new transactionModel(data);
-    let saveData = newTransactionModel.save();
-    
-    
-    if (saveData) {
-      // let getData = await contractModel.findById(ads_Id)
-      // if (getData) {
-        let updateData1 = await contractReceiveModel.findOneAndUpdate({adsId:contract_id,influecerId:influ_id},{status:"approve"},{new:true});
-        let updateData2 = await bidModel.findOneAndUpdate({adsId:contract_id,influecerId:influ_id},{status:"pending"},{new:true});
-        if (updateData1 && updateData2) {
-            res({status:200,data:"data updated"})
-        } else {
-            rej({status:404,message:"Contract Not Approve.."});
+        if (data1.razorpay_payment_id) {
+        let updateData1 = await contractReceiveModel.findOneAndUpdate({adsId:contract_id,influecerId:influ_id},{status:"complete"},{new:true});
+        if (!updateData1) {
+            rej({status:404,message:"Contract not found..."});
         }
-    // } else {
-    //     rej({status:404,message:"Contract Not found.."});
-    // }
-    
-          res({status:200,data:"payment is successful"});
-      } else {
-          rej({status:404,message:"Transaction Data not Added..."})
-      }
+        let updateData2 = await transactionModel.findOneAndUpdate({adsId:contract_id,influecerId:influ_id},{status:"complete"},{new:true});
+        if (!updateData2) {
+            rej({status:404,message:"transaction not found..."});
+        }
+
+        let updateData3 = await walletModel.findOneAndUpdate({adsId:contract_id,influecerId:influ_id},{status:"complete"},{new:true});
+        if (!updateData3) {
+            rej({status:404,message:"Wallet data not found..."});
+        }
+            let data = {};
+            data["publisherId"] = ads_Id;
+            data["influencerId"] = influ_id;
+            data["amount"] = data1.amount;
+            data["paymentId"] = data1.razorpay_payment_id;
+            data["orderId"] = data1.razorpay_order_id;
+            data["paymentSignature"] = data1.razorpay_signature;    
+            
+            let newTransactionModel = new adminTransactonModel(data);
+            let saveData = newTransactionModel.save();
+            
+            if (saveData) {
+                  res({status:200,data:"payment is successful"});
+              } else {
+                  rej({status:404,message:"Transaction Data not Added..."})
+              }
+        } else {
+            rej({status:404,message:"Payment Fail..."});
+        }
     } catch (err) {
       rej( { status:err?.status || 500,
         error:err,

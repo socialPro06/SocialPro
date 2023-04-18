@@ -1,11 +1,11 @@
 const { model,Schema } = require("mongoose");
 
 const transactionSchema = new Schema({ 
-    adsId:{ 
+    publisherId:{ 
         type: Schema.Types.ObjectId, 
         // required: true,   
     }, 
-    contractId:{ 
+    adsId:{ 
         type: Schema.Types.ObjectId, 
         // required: true, 
     },

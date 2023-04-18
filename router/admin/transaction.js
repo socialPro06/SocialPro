@@ -8,6 +8,9 @@ transactionRoute.get('/',(req,res)=>{
 })
 
 
-transactionRoute.get("/getAll/:ads_id",transactionController.getAll);
+transactionRoute.get("/getAll",transactionController.getAll);
+transactionRoute.get('/createOrder',transactionController.createOrder);
+transactionRoute.post('/paymentVerify',transactionController.paymentVerify);
+
 
 module.exports = transactionRoute

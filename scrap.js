@@ -9,7 +9,8 @@ async function start(name) {
   const page = await browser.newPage()
 
 
-  await page.goto(`https://instagram.com/${name}`)
+  // await page.goto(`https://instagram.com/${name}`)
+  await page.goto(`https://www.pinterest.ca/${name}/`)
 
   //rutu
   // let profileImage = await page.evaluate(() => {
@@ -20,14 +21,14 @@ async function start(name) {
 
   // class="x6umtig x1b1mbwd xaqea5y xav7gou xk390pu x5yr21d xpdipgo xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x11njtxf xh8yej3"
 
-  let profileImage = await page.evaluate(() => {
-    let a = Array.from(document.querySelectorAll(".x6umtig x1b1mbwd xaqea5y xav7gou xk390pu x5yr21d xpdipgo xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x11njtxf xh8yej3")).map(e => {
-      console.log(e.src)
-        // e.src
-    })
-    return a
-  })
-  console.log("profileImage .............", profileImage)
+  // let profileImage = await page.evaluate(() => {
+  //   let a = Array.from(document.querySelectorAll(".x6umtig x1b1mbwd xaqea5y xav7gou xk390pu x5yr21d xpdipgo xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x11njtxf xh8yej3")).map(e => {
+  //     console.log(e.src)
+  //       // e.src
+  //   })
+  //   return a
+  // })
+  // console.log("profileImage .............", profileImage)
 
 
 
@@ -46,11 +47,11 @@ async function start(name) {
   // })
   // console.log("postCount .............",postCount)
 
-  // let followingNumber = await page.evaluate(() => {
-  //   let a = Array.from(document.querySelectorAll("._ac2a")).map(e=>e.textContent)[1].toString();
-  //   return a
-  // })
-  // console.log("followingNumber .............",followingNumber)
+  let followingNumber = await page.evaluate(() => {
+    let a = Array.from(document.querySelectorAll("#__PWS_ROOT__ > div:nth-child(1) > div > div.appContent > div > div > div > div.Jea.m2F.mQ8.zI7.iyn.Hsu > div > div > div:nth-child(4) > div > div:nth-child(3) > div > span")).map(e=>e.text)[0];
+    return a
+  })
+  console.log("followingNumber .............",followingNumber)
 
   // let followerNumber = await page.evaluate(() => {
   //   let a = Array.from(document.querySelectorAll("._ac2a")).map(e=>e.textContent)[2].toString();
@@ -74,4 +75,4 @@ async function start(name) {
   await browser.close()
 }
 
-start("rvcjinsta")
+start("wallpapers_pixhells")

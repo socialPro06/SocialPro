@@ -67,31 +67,35 @@ cancelBid:(ads_id,influ_id)=>{
     return new Promise(async(rej,res)=>{
         try {
             let getData = await contractModel.findById(ads_id);
-
-            let cancelData = await bidModel.findOneAndDelete(
-                { adsId:ads_id, influencerId:influ_id },
-                { new:true }
-                )
-            let cancelData2 = await contractReceiveModel.findOneAndDelete(
-                { adsId:ads_id, influencerId:influ_id },
-                { new:true })
-            
-            if (cancelData && cancelData2) {
-                let count = getData.influencerCounte - 1;
-                let updatecontractModel =await contractModel.findByIdAndUpdate(ads_id,{influencerCounte: count},{new:true})
-                if (updatecontractModel) {
-                    res({status:200,data:"Contract Cancel...."})
+            if (getData) {
+                
+                let cancelData = await bidModel.findOneAndDelete(
+                    { adsId:ads_id, influencerId:influ_id },
+                    { new:true }
+                    )
+                    let cancelData2 = await contractReceiveModel.findOneAndDelete(
+                        { adsId:ads_id, influencerId:influ_id },
+                        { new:true })
+                        
+                        if (cancelData && cancelData2) {
+                            let count = getData.influencerCounte - 1;
+                            let updatecontractModel =await contractModel.findByIdAndUpdate(ads_id,{influencerCounte: count},{new:true})
+                            if (updatecontractModel) {
+                                res({status:200,data:"Contract Cancel...."})
+                            }
+                        } else {
+                            rej({status:200,message:"Contract not found"})
+                        }  
+                    } else {
+                        rej({status:404,message:"Contract not Found..."})
                     }
-            } else {
-                rej({status:200,message:"Contract not found"})
-            }  
         } catch (err) {
             rej({ status: err?.status || 500, error: err, message: err?.message || "Something went wrong" })
         }
     })
 },
 
-requesedBid:(influ_id,page,limit)=>{
+requestedBid:(influ_id,page,limit)=>{
     return new Promise (async (res,rej)=>{
         try {
             page = parseInt(page);

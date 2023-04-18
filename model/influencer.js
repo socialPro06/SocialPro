@@ -23,9 +23,10 @@ const influencerSchema = new Schema({
         required: true, 
         unique: true 
     },
-    profileUrl: { 
-        type: String, 
-    },
+
+    platform:[
+        { name : String , url: String}
+    ],
     password:{
         type: String, 
         required: true
