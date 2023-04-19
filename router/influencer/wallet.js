@@ -7,5 +7,6 @@ walletRoute.get('/',(req,res)=>{
 })
 
 walletRoute.get('/pending',walletController.pending);
+walletRoute.get('/complete',walletController.complete);
 
 module.exports = walletRoute;

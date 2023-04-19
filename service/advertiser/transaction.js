@@ -50,27 +50,28 @@ return new Promise(async (res,rej)=>{
       let updateData2 = await bidModel.findOneAndUpdate({adsId:contract_id,influecerId:influ_id},{status:"pending"},{new:true});
       if (!updateData2) {
         rej({status:404,message:"Bid Not Found..."})
+      } else {
+
+        let data = {};
+        data["publisherId"] = ads_Id;
+        data["influencerId"] = influ_id;
+        data["amount"] = data1.amount;
+        data["paymentId"] = data1.razorpay_payment_id;
+        data["orderId"] = data1.razorpay_order_id;
+        data["paymentSignature"] = data1.razorpay_signature;
+        data["adsId"] = contract_id;
+        
+        let newTransactionModel = new transactionModel(data);
+        let saveData = newTransactionModel.save();
+        if (saveData) {
+          res({status:200,data:"payment is successful"});
+        } else {
+          rej({status:404,message:"Transaction Data not Added..."})
+        }
+        
+        let newWalletModel = new walletModel(data);
+        let saveData2 = newWalletModel.save();
       }
-          let data = {};
-          data["publisherId"] = ads_Id;
-          data["influencerId"] = influ_id;
-          data["amount"] = data1.amount;
-          data["paymentId"] = data1.razorpay_payment_id;
-          data["orderId"] = data1.razorpay_order_id;
-          data["paymentSignature"] = data1.razorpay_signature;
-          data["adsId"] = contract_id;
-
-          let newTransactionModel = new transactionModel(data);
-          let saveData = newTransactionModel.save();
-            if (saveData) {
-                res({status:200,data:"payment is successful"});
-            } else {
-                rej({status:404,message:"Transaction Data not Added..."})
-            }
-            
-            let newWalletModel = new walletModel(data);
-            let saveData2 = newWalletModel.save();
-
     }
 } catch (err) {
   rej( { status:err?.status || 500,
