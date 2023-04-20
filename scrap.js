@@ -72,6 +72,15 @@ async function start(name) {
   // })
   // console.log("bio .............",bio)
 
+  /*
+  
+https://www.instagram.com/oauth/authorize?client_id=1474430383361971&redirect_url=https%3A%2F%2Fgithub.com%2FsocialPro06%2FSocialPro&logger_id=0aacadee-b3da-43a4-8f5a-cac92bff8224
+
+https://github.com/socialPro06/SocialPro?code=
+AQB9rzGaYyXJfrgbAwhYXTh_RY440LLi81ha-i4sEQ8SWScjKlE6m2pJl_g4dXFjKenhxjZnhKRpm8iiScPuusD1Q8waRcxFwgoDKvM41ubY-mcvqAssCu3MLPsHiVtc395PG43npbVLiZ8RNtYVxmvqPVQc-bwDqBN3b96GrrtnZbyzD0QVYQbmKL0XpiO3kMqGtnFUC0yFmmYCeXauFax8Ej2ND2lNF9izXB_-XKOB7Q
+
+*/
+
   await browser.close()
 }
 

@@ -68,7 +68,7 @@ module.exports = {
             }
         })
     },
-
+ 
 getAllPost:(publisher_Id)=>{
     return new Promise(async(res,rej)=>{
         try {
@@ -78,7 +78,7 @@ getAllPost:(publisher_Id)=>{
                     totalCount : [{ $group : { _id: null,count : { $sum:1 }} }],
                     result : [
                         { $project : { __v:0 } },
-                        { $sort: { createdAt : -1 } }
+                        { $sort: { createdAt : -1 } },
                     ],  
                 }}
             ])
@@ -100,3 +100,4 @@ getAllPost:(publisher_Id)=>{
 },
 
 }
+
