@@ -10,7 +10,7 @@ transactionRoute.get('/',(req,res)=>{
     res.send({status:200,message:"Trasaction API Working..."});
 })
 
-transactionRoute.get('/createOrder',transactionController.createOrder);
+transactionRoute.post('/createOrder',transactionController.createOrder);
 transactionRoute.post('/paymentVerify',transactionController.paymentVerify);
 transactionRoute.get('/fetchPayment',transactionController.fetchPayment);
 transactionRoute.post('/refund',transactionController.refund);
