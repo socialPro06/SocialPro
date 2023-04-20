@@ -26,8 +26,9 @@ module.exports = {
         return new Promise(async (res, rej) => {
             try {
                 let loginData = await advertiserModel.findOne({ emailId, password })
+                console.log('data',loginData);
                 if (loginData) {
-                    if (loginData.status = "complete") {
+                    if (loginData.status == "complete") {
 
                         let key1 = process.env.ADVERTISER_ENCRYPTION_KEY
                         let encryptAdvertiser = encrypt(loginData._id, key1)
