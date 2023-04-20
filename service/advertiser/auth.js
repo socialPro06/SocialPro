@@ -56,8 +56,11 @@ login:(emailId , password)=>{
             } else {
                 rej({status:404, message:"Email or password incorrect !!"})
             }
-        } catch (err) {
-            rej({ status: 500, error: err, message:'Advertiser login something went wrong!!'});
+        }catch (err) {
+            rej( { status:err?.status || 500,
+                error:err,
+                message: err?.message || "Something went Wrong..."
+               } )
         }
     })
 },
@@ -113,7 +116,7 @@ changePass: (data, emailId) => {
                 rej({ status: 404, error: "Please enter right Email...!!", message: "Something went Wrong.." })
             }
         } catch (err) {
-            console.log("Error....", err)
+            // console.log("Error....", err)
             rej({ status: 500, error: err, message: "Something went Wrong.." })
         }
     })
