@@ -10,5 +10,6 @@ dashboardRoute.get("/",(req,res)=>{
 dashboardRoute.get('/getAllInfluencer',dashboardController.getAllInfluencer)
 dashboardRoute.get('/getAllPost/:publisher_Id',dashboardController.getAllPost)
 dashboardRoute.get('/search',dashboardController.search)
+dashboardRoute.get('/complete',dashboardController.complete)
 
 module.exports = dashboardRoute;

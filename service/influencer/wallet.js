@@ -56,8 +56,7 @@ pending: (influ_id)=>{
 
 complete: (influ_id)=>{
     return new Promise(async (res,rej)=>{
-        try {
-            
+        try {    
             let getData = await wallet.aggregate([
                 {
                     $match : { 
@@ -105,3 +104,4 @@ complete: (influ_id)=>{
 })
 }
 }
+

@@ -27,7 +27,36 @@ pendingRequest:(adver_id,page,limit)=>{
                         { $sort: { createdAt: -1 } },
                         { $skip: (page - 1)*limit },
                         { $limit: limit },
-                        
+                        { $lookup : {
+                            from:"adsdetails",
+                            foreignField :"_id",
+                            localField:"adsId",
+                            as:"postDetails"
+                        } },
+                        {
+                            $unwind : '$postDetails'
+                        },
+                        { $lookup : {
+                            from:"biddetails",
+                            let:{
+                                "cr_adsId":"$adsId",
+                                "cr_influId":"$influencerId"
+                            },
+                            pipeline:[
+                                {"$match":
+                                  {"$expr":
+                                    {"$and": [
+                                        {"$eq": ["$adsId",  "$$cr_adsId"]},
+                                        {"$eq": ["$influencerId",  "$$cr_influId"]},            
+                                    ]},
+                                },
+                              },
+                            ],
+                            as:"bidDetails"
+                        } },
+                        {
+                            $unwind : '$bidDetails'
+                        },
                         ]
                     }
                 }
@@ -88,9 +117,6 @@ pendingInflu:(ads_id,page,limit)=>{
                             localField:"adsId",
                             as:"postDetails"
                         } },
-
-
-                        
                         {
                             $unwind : '$postDetails'
                         },
@@ -140,7 +166,7 @@ pendingInflu:(ads_id,page,limit)=>{
     })
 },
 
-approveInflu:(ads_Id,page,limit)=>{
+approveInflu:(adver_id,page,limit)=>{
     return new Promise (async (res,rej)=>{
         try {
             page = parseInt(page);
@@ -148,7 +174,7 @@ approveInflu:(ads_Id,page,limit)=>{
             let getData = await contractReceiveModel.aggregate([
                 {
                     $match: {
-                        adsId: mongoose.Types.ObjectId(ads_Id),
+                        publisherId: mongoose.Types.ObjectId(adver_id),
                         status:'approve'
                     }
                 },
@@ -173,7 +199,37 @@ approveInflu:(ads_Id,page,limit)=>{
                         } },
                         {
                             $unwind : '$influencersData'
-                        }
+                        },
+                        { $lookup : {
+                            from:"adsdetails",
+                            foreignField :"_id",
+                            localField:"adsId",
+                            as:"postDetails"
+                        } },
+                        {
+                            $unwind : '$postDetails'
+                        },
+                        { $lookup : {
+                            from:"biddetails",
+                            let:{
+                                "cr_adsId":"$adsId",
+                                "cr_influId":"$influencerId"
+                            },
+                            pipeline:[
+                                {"$match":
+                                  {"$expr":
+                                    {"$and": [
+                                        {"$eq": ["$adsId",  "$$cr_adsId"]},
+                                        {"$eq": ["$influencerId",  "$$cr_influId"]},            
+                                    ]},
+                                },
+                              },
+                            ],
+                            as:"bidDetails"
+                        } },
+                        {
+                            $unwind : '$bidDetails'
+                        },
                         ]
                     }
                 }
@@ -199,36 +255,6 @@ approveInflu:(ads_Id,page,limit)=>{
     })
 },
 
-// approveRequest:(ads_Id,influ_Id)=>{
-// return new Promise(async (res,rej)=>{
-// try {
-//     let getData = await contractModel.findById(ads_Id)
-//     if (getData) {
-//         let updateData1 = await contractReceiveModel.findOneAndUpdate({adsId:ads_Id,influecerId:influ_Id},{status:"approve"},{new:true});
-//         let updateData2 = await bidModel.findOneAndUpdate({adsId:ads_Id,influecerId:influ_Id},{status:"pending"},{new:true});
-//         if (updateData1 && updateData2) {
-//             let getData1 = await influencerModel.findOne({_id:influ_Id})
-//             if (getData1) {
-//                 // console.log("data...",getData1);
-//                 await mail(getData1.emailId,`Your Contract Aprroved `,getData.title).then(()=>{
-//                     res({ status: 200, data: "Mail Has too be sent..." });
-//                 })
-//             }
-//             res({status:200,data:"data updated"})
-//         } else {
-//             rej({status:404,message:"Contract Not Approve.."});
-//         }
-//     } else {
-//         rej({status:404,message:"Contract Not found.."});
-//     }
-// } catch (err) {
-//     rej( { status:err?.status || 500 ,
-//         error: err, 
-//         message: err?.message || "Something Went Wrong ..."
-//     })
-// }
-// })
-// },
 
 cancleRequest:(ads_Id,influ_Id)=>{
     return new Promise(async (res,rej)=>{
