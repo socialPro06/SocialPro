@@ -57,7 +57,7 @@ exports.getAllInfluencer = async (req, res) => {
 
 exports.complete = async(req,res)=>{
   try {
-      let resp = await walletService.complete(req.query.adver_id);
+      let resp = await dashboardService.complete(req.query.adver_id);
       if (resp) {
           return response("complete payment",resp.data,200,res)
       } else {
