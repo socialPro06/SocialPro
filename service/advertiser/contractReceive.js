@@ -26,36 +26,6 @@ pendingRequest:(adver_id,page,limit)=>{
                         { $sort: { createdAt: -1 } },
                         { $skip: (page - 1)*limit },
                         { $limit: limit },
-                        // { $lookup : {
-                        //     from:"adsdetails",
-                        //     foreignField :"_id",
-                        //     localField:"adsId",
-                        //     as:"postDetails"
-                        // } },
-                        // {
-                        //     $unwind : '$postDetails'
-                        // },
-                        // { $lookup : {
-                        //     from:"biddetails",
-                        //     let:{
-                        //         "cr_adsId":"$adsId",
-                        //         "cr_influId":"$influencerId"
-                        //     },
-                        //     pipeline:[
-                        //         {"$match":
-                        //           {"$expr":
-                        //             {"$and": [
-                        //                 {"$eq": ["$adsId",  "$$cr_adsId"]},
-                        //                 {"$eq": ["$influencerId",  "$$cr_influId"]},            
-                        //             ]},
-                        //         },
-                        //       },
-                        //     ],
-                        //     as:"bidDetails"
-                        // } },
-                        // {
-                        //     $unwind : '$bidDetails'
-                        // },
                         ]
                     }
                 }
