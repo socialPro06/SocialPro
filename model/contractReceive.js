@@ -10,6 +10,10 @@ const adsDetailSchema = new Schema({
         type: Schema.Types.ObjectId, 
         // required: true, 
     },
+    bidAmount:{
+        type:Number,
+        require:true
+    },
     influencerId: { 
         type: Schema.Types.ObjectId,  
     },
