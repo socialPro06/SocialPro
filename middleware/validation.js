@@ -96,7 +96,7 @@ exports.bidInfluencerCheck = async (req,res,next)=>{
     try {
         let isId = await bidModel.findOne({adsId:req.query.ads_id,influencerId:req.query.influ_id})
         if (isId) {
-            return response("Influencer already bid on This Contract...",{},400,res)
+            return response("You already bid on This Contract...",{},400,res)
         } else {
             next()
         }

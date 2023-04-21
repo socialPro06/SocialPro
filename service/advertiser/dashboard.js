@@ -101,7 +101,7 @@ getAllPost:(publisher_Id)=>{
 complete: (adver_id)=>{
     return new Promise(async (res,rej)=>{
         try {    
-            let getData = await wallet.contractReceiveModel([
+            let getData = await contractReceiveModel.aggregate([
                 {
                     $match : { 
                         influencerId: mongoose.Types.ObjectId(adver_id),
