@@ -170,6 +170,20 @@ approveInflu:(adver_id,page,limit)=>{
                             $unwind : '$influencersData'
                         },
                         { $lookup : {
+                            from:"advertisers",
+                            foreignField :"_id",
+                            localField:"publisherId",
+                            pipeline:[
+                                {
+                                    $project: { __v :0, password:0, confirmPassword:0}
+                                }
+                            ],
+                            as:"advertiserData"
+                        } },
+                        {
+                            $unwind : '$advertiserData'
+                        },
+                        { $lookup : {
                             from:"adsdetails",
                             foreignField :"_id",
                             localField:"adsId",
