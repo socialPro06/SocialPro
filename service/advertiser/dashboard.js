@@ -104,7 +104,7 @@ complete: (adver_id)=>{
             let getData = await contractReceiveModel.aggregate([
                 {
                     $match : { 
-                        influencerId: mongoose.Types.ObjectId(adver_id),
+                        publisherId: mongoose.Types.ObjectId(adver_id),
                         status:'complete'
                     }
                 },
