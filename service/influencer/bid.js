@@ -18,6 +18,7 @@ makeBid :(ads_id,influ_id,data)=>{
                     data["influencerId"] = influ_id;
                     data["publisherId"] = getData.publisherId;
                     data["bidAmount"] = data.bidAmount;
+                    data["description"] = data.description;
                     let newbidModel = new bidModel(data);
                     let saveData = newbidModel.save();
                     

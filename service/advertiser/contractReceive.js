@@ -75,6 +75,11 @@ pendingInflu:(ads_id,page,limit)=>{
                             from:"influencers",
                             foreignField :"_id",
                             localField:"influencerId",
+                               pipeline:[
+                                {
+                                    $project: { __v :0, password:0, confirmPassword:0}
+                                }
+                            ],
                             as:"influencersData"
                         } },
                         {
@@ -89,33 +94,13 @@ pendingInflu:(ads_id,page,limit)=>{
                         {
                             $unwind : '$postDetails'
                         },
-                        { $lookup : {
-                            from:"biddetails",
-                            let:{
-                                "cr_adsId":"$adsId",
-                                "cr_influId":"$influencerId"
-                            },
-                            pipeline:[
-                                {"$match":
-                                  {"$expr":
-                                    {"$and": [
-                                        {"$eq": ["$adsId",  "$$cr_adsId"]},
-                                        {"$eq": ["$influencerId",  "$$cr_influId"]},            
-                                    ]},
-                                },
-                              },
-                            ],
-                            as:"bidDetails"
-                        } },
-                        {
-                            $unwind : '$bidDetails'
-                        },
                         ]
                     }
                 }
             ]);
             getData = getData[0];
-            if (getData.result.length > 0) {
+            // console.log("data",getData.totalCount[0].count);
+            if (getData.totalCount.length > 0) {
                 res({
                     status:200,
                     data: {

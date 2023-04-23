@@ -14,6 +14,11 @@ const adsDetailSchema = new Schema({
         type:Number,
         require:true
     },
+    description: { 
+        type: String, 
+        required: true,
+        trim:true 
+    },
     influencerId: { 
         type: Schema.Types.ObjectId,  
     },
