@@ -123,6 +123,44 @@ complete: (adver_id)=>{
                                 $project : { __v: 0 }
                             },
                             { $sort: {createdAt: -1} },
+                            { $lookup : {
+                                from:"influencers",
+                                foreignField :"_id",
+                                localField:"influencerId",
+                                pipeline:[
+                                    {
+                                        $project: { __v :0, password:0, confirmPassword:0}
+                                    }
+                                ],
+                                as:"influencersData"
+                            } },
+                            {
+                                $unwind : '$influencersData'
+                            },
+                            { $lookup : {
+                                from:"advertisers",
+                                foreignField :"_id",
+                                localField:"publisherId",
+                                pipeline:[
+                                    {
+                                        $project: { __v :0, password:0, confirmPassword:0}
+                                    }
+                                ],
+                                as:"advertiserData"
+                            } },
+                            {
+                                $unwind : '$advertiserData'
+                            },
+                            { $lookup : {
+                                from:"adsdetails",
+                                foreignField :"_id",
+                                localField:"adsId",
+                                as:"postDetails"
+                            } },
+                            {
+                                $unwind : '$postDetails'
+                            },
+
                         ]
                     }
                 }
