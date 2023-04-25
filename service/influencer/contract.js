@@ -15,7 +15,7 @@ addUrl:(ads_id,influ_id,data)=>{
                 let getData1 = await contractReceiveModel.findOneAndUpdate(
                     { adsId:mongoose.Types.ObjectId(ads_id),
                       influencerId:mongoose.Types.ObjectId(influ_id)},
-                    { instaPostUrl:instaPostUrl,
+                    { instaPostUrl:data,
                       status:"hold"},
                      {new:true } );
                 if (getData1) {
