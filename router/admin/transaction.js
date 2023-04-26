@@ -9,7 +9,7 @@ transactionRoute.get('/',(req,res)=>{
 
 
 transactionRoute.get("/getAll",transactionController.getAll);
-transactionRoute.get('/createOrder',transactionController.createOrder);
+transactionRoute.post('/createOrder',transactionController.createOrder);
 transactionRoute.post('/paymentVerify',transactionController.paymentVerify);
 
 
