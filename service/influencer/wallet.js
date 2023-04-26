@@ -29,6 +29,15 @@ pending: (influ_id)=>{
                                 $project : { __v: 0 }
                             },
                             { $sort: {createdAt: -1} },
+                            { $lookup : {
+                                from:"adsdetails",
+                                foreignField :"_id",
+                                localField:"adsId",
+                                as:"postData"
+                            } },
+                            {
+                                $unwind : '$postData'
+                            },
                         ]
                     }
                 }
@@ -79,6 +88,15 @@ complete: (influ_id)=>{
                                 $project : { __v: 0 }
                             },
                             { $sort: {createdAt: -1} },
+                            { $lookup : {
+                                from:"adsdetails",
+                                foreignField :"_id",
+                                localField:"adsId",
+                                as:"postData"
+                            } },
+                            {
+                                $unwind : '$postData'
+                            },
                         ]
                     }
                 }
