@@ -31,7 +31,6 @@ const adsDetailSchema = new Schema({
         enum:[
             "request",
             "approve",
-            "hold", 
             "complete"
         ],
         default:'request'

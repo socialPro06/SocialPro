@@ -12,7 +12,22 @@ exports.addUrl = async (req,res)=>{
         if (resp) {
             return response("Url added Success..",{},200,res)
         } else {
-            return response("Url Not added..",{},200,res)
+            return response("Url Not added..",{},500,res)
+                    }
+    } catch (err) {
+        return response(err.message, err?.error, err.status, res)
+    }
+}
+
+exports.complete = async (req,res)=>{
+    try {
+        let resp = await contractService.complete(
+            req.query.influ_id
+        )
+        if (resp) {
+            return response("Complete contract data ..",resp.data,200,res)
+        } else {
+            return response("data Not found..",{},500,res)
                     }
     } catch (err) {
         return response(err.message, err?.error, err.status, res)
