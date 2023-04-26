@@ -70,48 +70,80 @@ try {
 },
 
 
-createOrder:(amount)=>{
+createOrder:(amount,influ_Id,contract_Id)=>{
     return new Promise(async(res,rej)=>{
       try {
-    
+
     var option = {
         amount: parseInt(parseFloat(amount)*100),
         currency:"INR",
         }
-
+    
     await razorpayInstance.orders.create(option,function(err,order){
     if(!err){
+        let data1 = {};
+        data1["paymentId"] = order.id;
+        data1["influencerId"] = influ_Id;
+        data1["amount"] = amount;
         res({status:200,data:order})
     } else {
         rej({status:404,message:err});
     }
     })
+    
+    let updateData1 = await contractReceiveModel.findOneAndUpdate({adsId:contract_Id,influecerId:influ_Id},{status:"complete"},{new:true});
+    if (!updateData1) {
+        rej({status:404,message:"Contract not found..."});
+    }
+    let updateData2 = await transactionModel.findOneAndUpdate({adsId:contract_Id,influecerId:influ_Id},{status:"complete"},{new:true});
+    if (!updateData2) {
+        rej({status:404,message:"transaction not found..."});
+    }
+
+    let updateData3 = await walletModel.findOneAndUpdate({adsId:contract_Id,influecerId:influ_Id},{status:"complete"},{new:true});
+    if (!updateData3) {
+        rej({status:404,message:"Wallet data not found..."});
+    }
+
+    let data = {};
+
+    // data["paymentId"] = orderData.id;
+    data["amount"] = amount;
+    let newTransactionModel = new adminTransactonModel(data);
+    let saveData = newTransactionModel.save();
+    
+    if (saveData) {
+          res({status:200,data:"payment is successful"});
+      } else {
+          rej({status:404,message:"Transaction Data not Added..."})
+      }
     } catch (err) {
         rej({status:500,error:err,message:"Something went Wrong..."});
     }
+
     })
 },
 
-paymentVerify:(ads_Id,influ_id,contract_id,data1)=>{
+paymentVerify:(adver_Id,influ_Id,contract_Id,data1)=>{
     return new Promise(async (res,rej)=>{
       try {  
         if (data1.razorpay_payment_id) {
-        let updateData1 = await contractReceiveModel.findOneAndUpdate({adsId:contract_id,influecerId:influ_id},{status:"complete"},{new:true});
+        let updateData1 = await contractReceiveModel.findOneAndUpdate({adsId:contract_Id,influecerId:influ_Id},{status:"complete"},{new:true});
         if (!updateData1) {
             rej({status:404,message:"Contract not found..."});
         }
-        let updateData2 = await transactionModel.findOneAndUpdate({adsId:contract_id,influecerId:influ_id},{status:"complete"},{new:true});
+        let updateData2 = await transactionModel.findOneAndUpdate({adsId:contract_Id,influecerId:influ_Id},{status:"complete"},{new:true});
         if (!updateData2) {
             rej({status:404,message:"transaction not found..."});
         }
 
-        let updateData3 = await walletModel.findOneAndUpdate({adsId:contract_id,influecerId:influ_id},{status:"complete"},{new:true});
+        let updateData3 = await walletModel.findOneAndUpdate({adsId:contract_Id,influecerId:influ_Id},{status:"complete"},{new:true});
         if (!updateData3) {
             rej({status:404,message:"Wallet data not found..."});
         }
             let data = {};
-            data["publisherId"] = ads_Id;
-            data["influencerId"] = influ_id;
+            data["publisherId"] = adver_Id;
+            data["influencerId"] = influ_Id;
             data["amount"] = data1.amount;
             data["paymentId"] = data1.razorpay_payment_id;
             data["orderId"] = data1.razorpay_order_id;
