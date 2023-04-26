@@ -1,160 +1,148 @@
-const Razorpay = require('razorpay');
+const Razorpay =  require('razorpay');
 const transactionModel = require('../../model/transaction');
 const walletModel = require('../../model/wallet');
 const contractReceiveModel = require('../../model/contractReceive');
 const contractModel = require('../../model/contract')
-const bidModel = require('../../model/bid')
+const bidModel= require('../../model/bid')
 const path = require('path')
 const { default: mongoose } = require('mongoose');
-require("dotenv").config({ path: path.join(__dirname, "../../config/.env") })
+require("dotenv").config({path: path.join(__dirname,"../../config/.env")})
 
 const razorpayInstance = new Razorpay({
-  key_id: process.env.key_id,
-  key_secret: process.env.key_secret
-});
+    key_id: process.env.key_id,
+    key_secret: process.env.key_secret 
+    });
 
 
 module.exports = {
 
-  createOrder: (amount) => {
-    return new Promise(async (res, rej) => {
+createOrder:(amount)=>{
+    return new Promise(async(res,rej)=>{
       try {
-
-        var option = {
-          amount: parseInt(parseFloat(amount) * 100),
-          currency: "INR",
+    
+    var option = {
+        amount: parseInt(parseFloat(amount)*100),
+        currency:"INR",
         }
 
-        await razorpayInstance.orders.create(option, function (err, order) {
-          if (!err) {
-            res({ status: 200, data: order })
-          } else {
-            rej({ status: 404, message: err });
+    await razorpayInstance.orders.create(option,function(err,order){
+    if(!err){
+        res({status:200,data:order})
+    } else {
+        rej({status:404,message:err});
+    }
+    })
+    } catch (err) {
+        rej({status:500,error:err,message:"Something went Wrong..."});
+    }
+    })
+},
+
+paymentVerify:(ads_Id,influ_id,contract_id,data1)=>{
+return new Promise(async (res,rej)=>{
+  try { 
+    
+    if (data1.razorpay_payment_id) {
+      let updateData1 = await contractReceiveModel.findOneAndUpdate({adsId:contract_id,influecerId:influ_id},{status:"approve"},{new:true});
+      if (!updateData1) {
+        rej({status:404,message:"Contract Not Found..."})
+      }
+      let updateData2 = await bidModel.findOneAndUpdate({adsId:contract_id,influecerId:influ_id},{status:"pending"},{new:true});
+      if (!updateData2) {
+        rej({status:404,message:"Bid Not Found..."})
+      } else {
+
+        let data = {};
+        data["publisherId"] = ads_Id;
+        data["influencerId"] = influ_id;
+        data["amount"] = data1.amount;
+        data["paymentId"] = data1.razorpay_payment_id;
+        data["orderId"] = data1.razorpay_order_id;
+        data["paymentSignature"] = data1.razorpay_signature;
+        data["adsId"] = contract_id;
+        
+        let newTransactionModel = new transactionModel(data);
+        let saveData = newTransactionModel.save();
+        if (saveData) {
+          res({status:200,data:"payment is successful"});
+        } else {
+          rej({status:404,message:"Transaction Data not Added..."})
+        }
+        
+        let newWalletModel = new walletModel(data);
+        let saveData2 = newWalletModel.save();
+      }
+    }
+} catch (err) {
+  rej( { status:err?.status || 500,
+    error:err,
+    message: err?.message || "Something went Wrong..."
+   } )}
+})
+},
+
+
+fetchPayment:(ads_Id)=>{
+  return new Promise(async (res,rej)=>{
+    try {
+      let getData = await transactionModel.aggregate([
+        { $match: {
+          publisherId: mongoose.Types.ObjectId(ads_Id),
+        } },
+        { $facet : {
+          totalCount : [ { $group : { _id:null , count : { $sum : 1 }} }],
+          result : [
+            { $project : { _v:0 } },
+            { $sort : { createdAt: -1 } }
+          ]
+        }}
+      ])
+      getData = getData[0];
+
+      if (getData.totalCount.length > 0) {
+        res({
+          status:200 , 
+          data: {
+            totalCount: getData.totalCount[0].count,
+            result: getData.result
           }
         })
-      } catch (err) {
-        rej({ status: 500, error: err, message: "Something went Wrong..." });
+      } else {
+        rej({status:404, message:"Data Not Found...."});
       }
-    })
-  },
+    } catch (err) {
+      rej({status:500,error:err,message:"Something went Wrong...!!"});
+    }
+  })
+},
 
-  paymentVerify: (ads_Id, influ_id, contract_id, data1) => {
-    return new Promise(async (res, rej) => {
-      try {
-
-        if (data1.razorpay_payment_id) {
-          let updateData1 = await contractReceiveModel.findOneAndUpdate({ adsId: contract_id, influecerId: influ_id }, { status: "approve" }, { new: true });
-          if (!updateData1) {
-            rej({ status: 404, message: "Contract Not Found..." })
-          }
-          let updateData2 = await bidModel.findOneAndUpdate({ adsId: contract_id, influecerId: influ_id }, { status: "pending" }, { new: true });
-          if (!updateData2) {
-            rej({ status: 404, message: "Bid Not Found..." })
-          } else {
-
-            let data = {};
-            data["publisherId"] = ads_Id;
-            data["influencerId"] = influ_id;
-            data["amount"] = data1.amount;
-            data["paymentId"] = data1.razorpay_payment_id;
-            data["orderId"] = data1.razorpay_order_id;
-            data["paymentSignature"] = data1.razorpay_signature;
-            data["adsId"] = contract_id;
-
-            let newTransactionModel = new transactionModel(data);
-            let saveData = newTransactionModel.save();
-            if (saveData) {
-              let newWalletModel = new walletModel(data);
-              let saveData2 = newWalletModel.save();
-              if (saveData2) {
-                res({ status: 200, data: "wallet is successful" });
-              } else {
-                rej({ status: 404, message: "wallet Data not Added..." })
-              }
-              // res({status:200,data:"payment is successful"});
-            } else {
-              rej({ status: 404, message: "Transaction Data not Added..." })
-            }
-
-
-          }
-        }
-      } catch (err) {
-        rej({
-          status: err?.status || 500,
-          error: err,
-          message: err?.message || "Something went Wrong..."
-        })
+refund:(ads_Id,payment_Id)=>{
+return new Promise(async (res,rej)=>{
+  try {
+    let getData = await transactionModel.findOne({adsId :ads_Id , paymentId: payment_Id})
+    console.log(getData);
+    if (getData) {
+      await razorpayInstance.payments.refund(payment_Id,{
+        "amount":getData.amount,
+        "speed":'optimum'
+      },function(err,result){
+        if(!err){
+          res({status:200,data:result})
+      } else {
+          rej({status:404,message:err});
       }
-    })
-  },
+      })
+      // res({status:200,data:"Refund Success..."})
+    } else {
+      rej({status:404,message:"Refund Data not Find...."})
+    }
+  } catch (err) {
+    rej({status:500,error:err,message:"Something went Wrong...!!"});
+  }
+})
+},
 
-
-  fetchPayment: (ads_Id) => {
-    return new Promise(async (res, rej) => {
-      try {
-        let getData = await transactionModel.aggregate([
-          {
-            $match: {
-              publisherId: mongoose.Types.ObjectId(ads_Id),
-            }
-          },
-          {
-            $facet: {
-              totalCount: [{ $group: { _id: null, count: { $sum: 1 } } }],
-              result: [
-                { $project: { _v: 0 } },
-                { $sort: { createdAt: -1 } }
-              ]
-            }
-          }
-        ])
-        getData = getData[0];
-
-        if (getData.totalCount.length > 0) {
-          res({
-            status: 200,
-            data: {
-              totalCount: getData.totalCount[0].count,
-              result: getData.result
-            }
-          })
-        } else {
-          rej({ status: 404, message: "Data Not Found...." });
-        }
-      } catch (err) {
-        rej({ status: 500, error: err, message: "Something went Wrong...!!" });
-      }
-    })
-  },
-
-  refund: (ads_Id, payment_Id) => {
-    return new Promise(async (res, rej) => {
-      try {
-        let getData = await transactionModel.findOne({ adsId: ads_Id, paymentId: payment_Id })
-        console.log(getData);
-        if (getData) {
-          await razorpayInstance.payments.refund(payment_Id, {
-            "amount": getData.amount,
-            "speed": 'optimum'
-          }, function (err, result) {
-            if (!err) {
-              res({ status: 200, data: result })
-            } else {
-              rej({ status: 404, message: err });
-            }
-          })
-          // res({status:200,data:"Refund Success..."})
-        } else {
-          rej({ status: 404, message: "Refund Data not Find...." })
-        }
-      } catch (err) {
-        rej({ status: 500, error: err, message: "Something went Wrong...!!" });
-      }
-    })
-  },
-
-  order: (userId, data) => {
+order: (userId, data) => {
     return new Promise(async (res, rej) => {
       try {
         let orderCheckOutId;

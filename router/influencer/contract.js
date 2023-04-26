@@ -7,5 +7,6 @@ contractRoute.get('/',(req,res)=>{
 })
 
 contractRoute.put('/addUrl',contractContoller.addUrl);
+contractRoute.get('/complete',contractContoller.complete);
 
 module.exports = contractRoute
