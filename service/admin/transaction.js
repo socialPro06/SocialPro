@@ -35,6 +35,15 @@ try {
                 { $sort: {  createdAt : -1} },
                 { $skip: (page - 1)*limit },
                 { $limit: limit },
+                { $lookup : {
+                    from:"adsdetails",
+                    foreignField :"_id",
+                    localField:"adsId",
+                    as:"postDetails"
+                } },
+                {
+                    $unwind : '$postDetails'
+                },
                 ]
             }
         }
