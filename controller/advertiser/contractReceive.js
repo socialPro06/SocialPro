@@ -11,7 +11,7 @@ exports.pendingRequest = async (req,res)=>{
                 req.query.page,
                 req.query.limit
                 );
-        if (resp) {
+        if (resp) { 
             return response("Post request details...",resp.data,200,res);
         } else {
             return response("Not Found...",{},400,res);
@@ -19,6 +19,7 @@ exports.pendingRequest = async (req,res)=>{
     } 
 }   catch (err) {
         return response(err.message,err?.error,err.status,res);
+        
     }
 }
 
