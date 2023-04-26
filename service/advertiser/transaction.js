@@ -71,6 +71,11 @@ return new Promise(async (res,rej)=>{
         
         let newWalletModel = new walletModel(data);
         let saveData2 = newWalletModel.save();
+        if (saveData2) {
+          res({status:200,data:"payment is successful"});
+        } else {
+          rej({status:404,message:"Wallet Data not Added..."})
+        }
       }
     }
 } catch (err) {
