@@ -72,22 +72,23 @@ cancelBid:(ads_id,influ_id)=>{
             if (getData) {
                 
                 let cancelData = await bidModel.findOneAndDelete(
-                    { adsId:ads_id, influencerId:influ_id },
-                    { new:true }
-                    )
-                    let cancelData2 = await contractReceiveModel.findOneAndDelete(
-                        { adsId:ads_id, influencerId:influ_id },
-                        { new:true })
-                        
-                        if (cancelData && cancelData2) {
-                            let count = getData.influencerCounte - 1;
-                            let updatecontractModel =await contractModel.findByIdAndUpdate(ads_id,{influencerCounte: count},{new:true})
-                            if (updatecontractModel) {
-                                res({status:200,data:"Contract Cancel...."})
-                            }
-                        } else {
-                            rej({status:200,message:"Contract not found"})
-                        }  
+                    { adsId:ads_id, influencerId:influ_id }, )
+                    
+                if(cancelData){
+                    rej({status:200,data:"Bid Delete...."})
+                }
+
+                let cancelData2 = await contractReceiveModel.findOneAndDelete(
+                    { adsId:ads_id, influencerId:influ_id })
+                if(cancelData2){
+                    rej({status:200,data:"contractReceive Delete...."})
+                }
+
+                let count = getData.influencerCounte - 1;
+                let updatecontractModel =await contractModel.findByIdAndUpdate(ads_id,{influencerCounte: count},{new:true})
+                if (updatecontractModel) {
+                    res({status:200,data:"Contract Cancel...."})
+                }  
                     } else {
                         rej({status:404,message:"Contract not Found..."})
                     }
