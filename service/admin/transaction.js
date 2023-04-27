@@ -21,7 +21,7 @@ return new Promise(async(res,rej)=>{
 try {
     page = parseInt(page);
     limit = parseInt(limit);
-    let getData = await transactionModel.aggregate([
+    let getData1 = await transactionModel.aggregate([
         {
             $facet: {
                 totalCount : [ {
@@ -78,13 +78,13 @@ try {
             }
         }
     ])
-    getData = getData[0];
-    if (getData.totalCount[0].count > 0) {
+    getData1 = getData1[0];
+    if (getData1.totalCount[0].count > 0) {
         res({
             status:200,
             data:{ 
-                totalCount: getData.totalCount[0].count,
-                result: getData.result
+                totalCount: getData1.totalCount[0].count,
+                result: getData1.result
              }
         })
     } else {
@@ -103,13 +103,12 @@ try {
 createOrder:(amount,influ_Id,contract_Id)=>{
     return new Promise(async(res,rej)=>{
       try {
-
-    var option = {
-        amount: parseInt(parseFloat(amount)*100),
-        currency:"INR",
-        }
-    
-    await razorpayInstance.orders.create(option,function(err,order){
+            var option = {
+                amount: parseInt(parseFloat(amount)*100),
+                currency:"INR",
+            }
+            
+            await razorpayInstance.orders.create(option,function(err,order){
     if(!err){
         let data1 = {};
         data1["paymentId"] = order.id;
@@ -134,22 +133,21 @@ createOrder:(amount,influ_Id,contract_Id)=>{
     if (!updateData3) {
         rej({status:404,message:"Wallet data not found..."});
     }
-
-    let data = {};
-
-    // data["paymentId"] = orderData.id;
-    data["amount"] = amount;
+    
     let newTransactionModel = new adminTransactonModel(data);
     let saveData = newTransactionModel.save();
     
     if (saveData) {
-          res({status:200,data:"payment is successful"});
-      } else {
-          rej({status:404,message:"Transaction Data not Added..."})
-      }
-    } catch (err) {
-        rej({status:500,error:err,message:"Something went Wrong..."});
+        res({status:200,data:"payment is successful"});
+    } else {
+        rej({status:404,message:"Transaction Data not Added..."})
     }
+}
+    catch (err) {
+        rej( { status:err?.status || 500,
+            error:err,
+            message: err?.message || "Something went Wrong..."
+           } )  }
 
     })
 },
