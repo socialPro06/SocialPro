@@ -44,6 +44,36 @@ try {
                 {
                     $unwind : '$postDetails'
                 },
+                {
+                    $lookup : {
+                      from: "advertisers",
+                      localField: "publisherId", 
+                      foreignField: "_id",
+                      pipeline:[
+                          {
+                              $project: { __v :0, password:0, confirmPassword:0}
+                          }
+                      ],
+                      as: "advertiserData"
+                    }
+                  },
+                  {
+                      $unwind:"$advertiserData"
+                  },
+                  { $lookup : {
+                    from:"influencers",
+                    foreignField :"_id",
+                    localField:"influencerId",
+                       pipeline:[
+                        {
+                            $project: { __v :0, password:0, confirmPassword:0}
+                        }
+                    ],
+                    as:"influencersData"
+                } },
+                {
+                    $unwind : '$influencersData'
+                },
                 ]
             }
         }
