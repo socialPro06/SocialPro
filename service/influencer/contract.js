@@ -17,24 +17,13 @@ addUrl:(ads_id,influ_id,data)=>{
                 
                 let getData1 = await contractReceiveModel.findOneAndUpdate(
                     { adsId:mongoose.Types.ObjectId(ads_id),
-                      influencerId:mongoose.Types.ObjectId(influ_id)},
-
-                    { instaPostUrl:data.instaPostUrl },
-
+                      influencerId:mongoose.Types.ObjectId(influ_id)
+                    },
                     { instaPostUrl:data},
 
                      {new:true } );
                 if (getData1) {
-                    
-                    let updateData = await bidModel.findOneAndUpdate(
-                    { adsId:mongoose.Types.ObjectId(ads_id),
-                      influencerId:mongoose.Types.ObjectId(influ_id)
-                    },{status:"hold"},{new:true});
-                    if (updateData) {
-                        res({status:200,data:"Url Added..."});
-                    } else {
-                        rej({status:404,data:"Url not Added..."});
-                    }
+                    res({status:200,data:"Url Added..."});
                 } 
             } else {
                 rej({status:404,data:"Contract Not Found..."});   
