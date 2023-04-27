@@ -25,7 +25,6 @@ exports.createOrder =  async (req,res)=>{
     try {
         let resp = await transactionService.createOrder(
             req.body.amount,
-            // req.query.adver_id,
             req.query.influ_Id,
             req.query.contract_Id,
              );
